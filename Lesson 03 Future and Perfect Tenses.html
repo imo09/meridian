@@ -1,0 +1,684 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 03 Future and Perfect Tenses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column in three tinted parts (Overview / Tenses / Words); colour = grammar role, shared with the All Tenses Timeline */
+:root {
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --fg: #18212c;
+  --muted: #5a6777;
+  --line: #dce3eb;
+  --aux: #2160a6;
+  --verb: #0f7a49;
+  --sig: #b9400b;
+  --sig-bg: #fde9d9;
+  --head: #eef2f7;
+  --mark: #18212c;
+  --w1: #e6edf6;
+  --w2: #e4f1ea;
+  --w3: #f4ebe2;
+  --bad: #b3261e;
+  --f-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161d; --surface: #19202a; --fg: #e5eaf0; --muted: #97a3b2; --line: #29333f;
+    --aux: #82b4ee; --verb: #5ccf96; --sig: #ff9c5a; --sig-bg: #3b2416; --head: #1f2833; --mark: #e5eaf0;
+    --w1: #16202c; --w2: #14231c; --w3: #241d17; --bad: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11161d; --surface: #19202a; --fg: #e5eaf0; --muted: #97a3b2; --line: #29333f;
+  --aux: #82b4ee; --verb: #5ccf96; --sig: #ff9c5a; --sig-bg: #3b2416; --head: #1f2833; --mark: #e5eaf0;
+  --w1: #16202c; --w2: #14231c; --w3: #241d17; --bad: #ff8a80;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 820px; margin: 0 auto; padding-inline: 18px; padding-block: 36px 64px; display: grid; gap: 28px; }
+h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; line-height: 1.15; margin: 0; text-align: left; }
+h1 { font-size: clamp(2rem, 5vw, 2.6rem); letter-spacing: -0.015em; }
+h2 { font-size: 1.85rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.3rem; color: var(--fg); font-weight: 700; }
+.callout h4 { font-size: 1.1rem; }
+.n { font-family: var(--f-mono); font-size: 0.8em; color: var(--muted); font-weight: 500; margin-right: 10px; }
+p, .j { margin: 0; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.meta { font-family: var(--f-display); font-size: 0.9rem; color: var(--muted); margin-top: 6px; text-align: left; }
+
+.a { color: var(--aux); font-weight: 700; }
+.v { color: var(--verb); font-weight: 700; }
+.s { color: var(--sig); background: var(--sig-bg); font-weight: 700; padding: 0 3px; border-radius: 3px; }
+.f { font-family: var(--f-mono); font-size: 0.92em; }
+del { color: var(--muted); }
+.x { color: var(--bad); font-weight: 700; }
+.ok { color: var(--verb); font-weight: 700; }
+
+.top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.box h4 { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.toc ol { margin: 0; padding-left: 1.3em; display: grid; gap: 4px; font-family: var(--f-display); }
+.toc ol ol { padding-left: 1.1em; margin-top: 3px; font-size: 0.93rem; }
+.toc a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--line); }
+.toc a:hover, .toc a:focus-visible { border-color: var(--aux); color: var(--aux); outline: none; }
+.key ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 0.95rem; }
+.key .ex { color: var(--muted); }
+.link { font-family: var(--f-display); font-weight: 600; color: var(--aux); }
+
+.world { border-radius: 16px; padding: 24px; display: grid; gap: 22px; scroll-margin-top: 16px; }
+.world.w1 { background: var(--w1); } .world.w2 { background: var(--w2); } .world.w3 { background: var(--w3); }
+.world > header { display: grid; gap: 6px; }
+.eyebrow { font-family: var(--f-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.sub { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 22px; scroll-margin-top: 16px; }
+.sub > header { display: grid; gap: 6px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+section { display: grid; gap: 12px; scroll-margin-top: 16px; }
+section + section { border-top: 1px dashed var(--line); padding-top: 20px; }
+.thead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.thead svg { width: 220px; max-width: 100%; height: auto; flex: none; }
+.signals { font-size: 0.92rem; color: var(--muted); font-family: var(--f-display); }
+
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { background: var(--head); font-family: var(--f-display); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+td:first-child { font-family: var(--f-display); font-weight: 600; }
+td svg { width: 150px; height: auto; display: block; }
+.irr td, .irr td:first-child { font-family: var(--f-mono); font-weight: 500; }
+
+.uses { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.uses li { display: grid; grid-template-columns: 12.5rem minmax(0, 1fr); gap: 4px 16px; }
+.uses .k { font-family: var(--f-display); font-weight: 600; font-size: 0.9rem; color: var(--muted); padding-top: 2px; text-align: left; }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.pair > div { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; align-content: start; }
+.pair .gl { font-size: 0.9rem; color: var(--muted); font-style: italic; }
+.rule { border-left: 3px solid var(--sig); padding: 4px 0 4px 14px; font-family: var(--f-display); font-size: 1.05rem; text-align: left; }
+.callout { background: var(--bg); border: 1px solid var(--line); border-left: 4px solid var(--aux); border-radius: 10px; padding: 14px 16px; display: grid; gap: 10px; }
+.callout ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+figure { margin: 0; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow-x: auto; }
+figure svg { width: 100%; min-width: 420px; height: auto; display: block; }
+figcaption { font-size: 0.9rem; color: var(--muted); margin-top: 6px; text-align: justify; }
+.small { font-size: 0.92rem; color: var(--muted); }
+footer { font-family: var(--f-display); font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
+
+.uses .k .mini { display: block; margin-top: 8px; }
+.uses .k .mini svg { width: 150px; max-width: 100%; height: auto; display: block; }
+
+@media (max-width: 640px) {
+  .top, .pair { grid-template-columns: minmax(0, 1fr); }
+  .uses li { grid-template-columns: minmax(0, 1fr); }
+  .world { padding: 14px; border-radius: 12px; }
+  .sub { padding: 14px; }
+}
+</style>
+<div class="wrap" lang="en-GB">
+  <header>
+    <h1>Lesson 03: Future and Perfect Tenses</h1>
+    <p class="meta">14 October 2026 - grammar review</p>
+  </header>
+
+  <div class="top">
+    <nav class="box toc" aria-label="Contents">
+      <h4>Contents</h4>
+      <ol>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#tenses">Tenses</a>
+          <ol>
+            <li><a href="#present-forms">Present forms for the future</a></li>
+            <li><a href="#will-going-to">will and going to</a></li>
+            <li><a href="#future-continuous-perfect">Future continuous and future perfect</a></li>
+            <li><a href="#time-clauses">Time clauses and by the time</a></li>
+            <li><a href="#perfect-family">The perfect family</a></li>
+          </ol>
+        </li>
+        <li><a href="#words">Words and sounds</a>
+          <ol>
+            <li><a href="#irregular-verbs">Irregular verbs and spelling</a></li>
+          </ol>
+        </li>
+      </ol>
+    </nav>
+    <div class="box key">
+      <h4>Colour key</h4>
+      <ul>
+        <li><span class="a">auxiliary</span> <span class="ex">will, be going to, am / is / are, does, have / has, had, been</span></li>
+        <li><span class="v">main verb</span> <span class="ex">V1, V3 or -ing form</span></li>
+        <li><span class="s">signal word</span> <span class="ex">tells you which form to use</span></li>
+      </ul>
+      <p class="small">Timelines (same signs as the All Tenses Timeline, one for each use): X = action (several small X = actions in sequence), wave = action in progress, green bar = state, evidence or duration, blue vertical bar = reference point (or the moment a plan was made), arc with arrow = link to a later moment, dotted arrow = plan or arrangement, text above a point = fixed time, bracket = length or amount, dashed line = now. All twelve tenses: <a class="link" href="https://claude.ai/artifact/84gEdEArTuydNRLZNB8gow" target="_blank" rel="noopener">All Tenses Timeline</a></p>
+    </div>
+  </div>
+
+  <!-- PART 1 -->
+  <div class="world w1" id="overview">
+    <header>
+      <span class="eyebrow">Part 1 - In short</span>
+      <h2>Overview</h2>
+    </header>
+    <p>English has no single future tense: the form depends on how sure, how planned and how far along the action is. To choose one, ask:</p>
+    <ul class="uses">
+      <li><span class="k">Fixed timetable or programme?</span><span class="j">(present simple) The train <span class="v">leaves</span> <span class="s">at 9</span>.</span></li>
+      <li><span class="k">Arranged, with time, date or place?</span><span class="j">(present continuous) What <span class="a">are</span> you <span class="v">doing</span> <span class="s">this evening</span>? - I <span class="a">am</span> <span class="v">staying</span> at home.</span></li>
+      <li><span class="k">Planned before now, or a sign you can see now?</span><span class="j">(going to) <span class="s">Look</span> at those grey clouds! It<span class="a">'s going to</span> <span class="v">rain</span>!</span></li>
+      <li><span class="k">Opinion, decision made now, offer or promise?</span><span class="j">(will) I <span class="s">think</span> it <span class="a">will</span> <span class="v">rain</span> <span class="s">tomorrow</span>.</span></li>
+      <li><span class="k">In progress at an exact future time?</span><span class="j">(future continuous) <span class="s">At this time tomorrow</span>, I <span class="a">will be</span> <span class="v">teaching</span>.</span></li>
+      <li><span class="k">Finished before a future point?</span><span class="j">(future perfect) <span class="s">By the time</span> we <span class="v">get</span> there, the play <span class="a">will have</span> <span class="v">begun</span>.</span></li>
+      <li><span class="k">How long, measured at a future point?</span><span class="j">(future perfect continuous) <span class="s">By next July</span>, I <span class="a">will have been</span> <span class="v">teaching</span> <span class="s">for</span> twenty years.</span></li>
+    </ul>
+    <div class="tbl"><table>
+      <thead><tr><th>Form</th><th>Timeline</th><th>Structure</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Present simple</td><td data-icon="prsTime"></td><td class="f">subject + <span class="v">V1</span> (+ s)</td><td>The train <span class="v">leaves</span> <span class="s">at 9</span>.</td></tr>
+        <tr><td>Present continuous</td><td data-icon="prcPlan"></td><td class="f">subject + <span class="a">am/is/are</span> + <span class="v">V-ing</span></td><td>I <span class="a">am</span> <span class="v">meeting</span> her <span class="s">this evening</span>.</td></tr>
+        <tr><td>be going to</td><td data-icon="gtPlan"></td><td class="f">subject + <span class="a">am/is/are going to</span> + <span class="v">V1</span></td><td>I <span class="a">am going to</span> <span class="v">move</span> to Italy <span class="s">next month</span>.</td></tr>
+        <tr><td>Future simple (will)</td><td data-icon="fs"></td><td class="f">subject + <span class="a">will</span> + <span class="v">V1</span></td><td>I <span class="s">think</span> you <span class="a">will</span> <span class="v">enjoy</span> this film.</td></tr>
+        <tr><td>Future continuous</td><td data-icon="fc"></td><td class="f">subject + <span class="a">will be</span> + <span class="v">V-ing</span></td><td>I <span class="a">will be</span> <span class="v">having</span> dinner <span class="s">at 7 pm</span>.</td></tr>
+        <tr><td>Future perfect</td><td data-icon="fp"></td><td class="f">subject + <span class="a">will have</span> + <span class="v">V3</span></td><td>I <span class="a">will have</span> <span class="v">finished</span> my homework <span class="s">by the time</span> you <span class="v">get</span> back.</td></tr>
+        <tr><td>Future perfect continuous</td><td data-icon="fpc"></td><td class="f">subject + <span class="a">will have been</span> + <span class="v">V-ing</span></td><td><span class="s">By the time</span> she <span class="v">retires</span>, she <span class="a">will have been</span> <span class="v">teaching</span> <span class="s">for</span> forty years.</td></tr>
+      </tbody>
+    </table></div>
+    <h4>Key points</h4>
+    <ul class="uses">
+      <li><span class="k">Time clauses</span><span class="j">After <span class="s">if</span>, <span class="s">when</span>, <span class="s">as soon as</span>, <span class="s">before</span>, <span class="s">after</span>, <span class="s">until</span>, <span class="s">unless</span>, <span class="s">while</span>, <span class="s">once</span> use the present simple, not <span class="a">will</span>: I<span class="a">'ll</span> <span class="v">say</span> hi <span class="s">as soon as</span> I <span class="v">see</span> her.</span></li>
+      <li><span class="k">by the time</span><span class="j"><span class="s">By the time</span> + present simple takes the future perfect; <span class="s">by the time</span> + past simple takes the past perfect: <span class="s">By the time</span> we <span class="v">got</span> there, the play <span class="a">had</span> already <span class="v">begun</span>.</span></li>
+      <li><span class="k">will or going to</span><span class="j">For a prediction based on what you see now, use <span class="a">going to</span> (strong); for an opinion or belief, use <span class="a">will</span> (weak), often after <span class="s">I think</span>, <span class="s">I hope</span>, <span class="s">probably</span>. When both readings fit, both forms are correct.</span></li>
+      <li><span class="k">Present continuous as a future</span><span class="j">It needs a future time signal (<span class="s">tomorrow</span>, <span class="s">later</span>, <span class="s">next week</span>, <span class="s">this evening</span>); without one it means now. With the signal, <span class="a">am</span> <span class="v">teaching</span> and <span class="a">am going to</span> <span class="v">teach</span> often mean the same.</span></li>
+      <li><span class="k">In progress or finished</span><span class="j">The future continuous shows the action going on at the future moment; the future perfect shows it already finished by then: the baby <span class="a">will be</span> <span class="v">sleeping</span> <span class="s">when</span> you <span class="v">call</span>; the workers <span class="a">will have</span> <span class="v">finished</span> <span class="s">by the time</span> I <span class="v">arrive</span>.</span></li>
+      <li><span class="k">The perfect family</span><span class="j"><span class="a">have/has</span> + <span class="v">V3</span> looks back from now, <span class="a">had</span> + <span class="v">V3</span> from a past moment, <span class="a">will have</span> + <span class="v">V3</span> from a future moment. The partner tense marks the moment: past perfect with past simple, present perfect with the present, future perfect with a present simple time clause or <span class="s">by</span> + a future time.</span></li>
+      <li><span class="k">State verbs</span><span class="j"><span class="v">know</span>, <span class="v">be</span>, <span class="v">own</span>, <span class="v">love</span> have no continuous form, also in the perfect: <span class="s">By 2030</span> we <span class="a">will have</span> <span class="v">known</span> each other <span class="s">for</span> 30 years (not <del>will have been knowing</del>).</span></li>
+    </ul>
+    <p class="small">V1 = base form, V3 = past participle, V-ing = -ing form. Short forms: will = 'll, will not = won't.</p>
+  </div>
+
+  <!-- PART 2 -->
+  <div class="world w2" id="tenses">
+    <header>
+      <span class="eyebrow">Part 2</span>
+      <h2>Tenses</h2>
+    </header>
+
+    <!-- 2.1 -->
+    <div class="sub" id="present-forms">
+      <header><h3><span class="n">2.1</span>Present forms for the future</h3><p>Two present tenses also talk about the future: the present simple for fixed timetables and inside time clauses, the present continuous for personal arrangements.</p></header>
+
+      <section id="future-present-simple">
+        <div class="thead"><h4>Present simple</h4><span data-icon="prsTime"></span></div>
+        <p>Future events fixed by a timetable or programme, and every future action inside a time or condition clause.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Form</th><th>Structure</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Positive</td><td class="f">subject + <span class="v">V1</span> (+ s)</td><td>The train <span class="v">leaves</span> <span class="s">at 9</span>.</td></tr>
+            <tr><td>Negative</td><td class="f">subject + <span class="a">don't/doesn't</span> + <span class="v">V1</span></td><td>The shop <span class="a">doesn't</span> <span class="v">open</span> <span class="s">on Sunday</span>.</td></tr>
+            <tr><td>Question</td><td class="f">(<span class="s">Wh-</span>) + <span class="a">do/does</span> + subject + <span class="v">V1</span>?</td><td><span class="s">What time</span> <span class="a">does</span> the next train <span class="v">arrive</span>?</td></tr>
+          </tbody>
+        </table></div>
+        <ul class="uses">
+          <li><span class="k">Timetable or programme<span class="mini" data-icon="prsTime"></span></span><span class="j">The train <span class="v">leaves</span> <span class="s">at 9</span>. <span class="s">If</span> you <span class="v">want</span> to <span class="v">go</span> to the concert, it <span class="v">starts</span> <span class="s">at 8 pm</span>. <span class="a">Don't</span> <span class="v">be</span> late.</span></li>
+          <li><span class="k">Time clause (when, as soon as, before, after, until)<span class="mini" data-icon="prsClause"></span></span><span class="j">I<span class="a">'ll</span> <span class="v">buy</span> you a newspaper <span class="s">when</span> I <span class="v">go</span> out. Stay in your seat <span class="s">until</span> the bell <span class="v">rings</span>.</span></li>
+          <li><span class="k">Condition clause (if, unless, as long as)<span class="mini" data-icon="fsCond"></span></span><span class="j"><span class="s">If</span> I <span class="v">see</span> her, I <span class="a">will</span> <span class="v">say</span> hi. I <span class="a">will</span> <span class="v">help</span> you move <span class="s">if</span> I <span class="v">get</span> here on time.</span></li>
+          <li><span class="k">Watch out</span><span class="j">Never <span class="a">will</span> inside the time or condition clause: <span class="x">✗</span> <del>as soon as I will see her</del> <span class="ok">✓</span> <span class="s">as soon as</span> I <span class="v">see</span> her.</span></li>
+        </ul>
+      </section>
+
+      <section id="future-present-continuous">
+        <div class="thead"><h4>Present continuous</h4><span data-icon="prcPlan"></span></div>
+        <p>Future plans and (social) arrangements already fixed: we usually give the time, the date and/or the place.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Form</th><th>Structure</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Positive</td><td class="f">subject + <span class="a">am/is/are</span> + <span class="v">V-ing</span></td><td>I <span class="a">am</span> <span class="v">meeting</span> John at the airport <span class="s">tomorrow at 5.30</span>.</td></tr>
+            <tr><td>Negative</td><td class="f">subject + <span class="a">am/is/are not</span> + <span class="v">V-ing</span></td><td>I <span class="a">am not</span> <span class="v">working</span> <span class="s">tomorrow</span>, so we <span class="a">can</span> <span class="v">go</span> to the beach.</td></tr>
+            <tr><td>Question</td><td class="f">(<span class="s">Wh-</span>) + <span class="a">am/is/are</span> + subject + <span class="v">V-ing</span>?</td><td>What <span class="a">are</span> you <span class="v">doing</span> <span class="s">this evening</span>?</td></tr>
+          </tbody>
+        </table></div>
+        <ul class="uses">
+          <li><span class="k">Arrangement (time, date, place)<span class="mini" data-icon="prcPlan"></span></span><span class="j">What <span class="a">are</span> you <span class="v">doing</span> <span class="s">this evening</span>? - I <span class="a">am</span> <span class="v">staying</span> at home. Ann and Andy <span class="a">are</span> <span class="v">getting</span> married <span class="s">on the 14th of June</span>.</span></li>
+          <li><span class="k">Watch out</span><span class="j">Without a future time signal the present continuous means now.</span></li>
+        </ul>
+        <div class="pair">
+          <div><span>I <span class="a">am</span> <span class="v">teaching</span>.</span><span class="gl">Right now.</span></div>
+          <div><span>I <span class="a">am</span> <span class="v">teaching</span> <span class="s">tomorrow</span>.</span><span class="gl">An arrangement for tomorrow: same meaning as I <span class="a">am going to</span> <span class="v">teach</span> <span class="s">tomorrow</span>.</span></div>
+        </div>
+      </section>
+
+      <section id="signals-present-forms">
+        <h4>Signal words</h4>
+        <div class="tbl"><table>
+          <thead><tr><th>Signal</th><th>Form</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><span class="s">at 9</span>, <span class="s">at 8 pm</span>, timetable, programme</td><td>Present simple</td><td>The train <span class="v">leaves</span> <span class="s">at 9</span>.</td></tr>
+            <tr><td><span class="s">if</span>, <span class="s">when</span>, <span class="s">as soon as</span>, <span class="s">before</span>, <span class="s">after</span>, <span class="s">until</span>, <span class="s">unless</span>, <span class="s">while</span>, <span class="s">once</span>, <span class="s">as long as</span></td><td>Present simple (in the clause)</td><td>We <span class="a">will</span> <span class="v">go</span> out <span class="s">as soon as</span> we <span class="v">finish</span> this.</td></tr>
+            <tr><td><span class="s">tomorrow</span>, <span class="s">later</span>, <span class="s">this evening</span>, <span class="s">next week</span>, <span class="s">next month</span>, <span class="s">on June 25th</span></td><td>Present continuous</td><td>We <span class="a">are</span> <span class="v">getting</span> married <span class="s">on June 25th</span>.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small">Future time signals such as tomorrow or next week go with every future form: they matter most with the present continuous, because they turn it from now into future.</p>
+      </section>
+    </div>
+
+    <!-- 2.2 -->
+    <div class="sub" id="will-going-to">
+      <header><h3><span class="n">2.2</span>will and going to</h3><p>Both talk about predictions and plans: <span class="a">going to</span> when the future is already visible or planned, <span class="a">will</span> when it is an opinion or a decision made now.</p></header>
+
+      <section id="going-to">
+        <div class="thead"><h4>be going to</h4><span data-icon="gtPlan"></span></div>
+        <p>Intentions decided before the moment of speaking, and predictions based on signs we can see now.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Form</th><th>Structure</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Positive</td><td class="f">subject + <span class="a">am/is/are going to</span> + <span class="v">V1</span></td><td>I <span class="a">am going to</span> <span class="v">move</span> to Italy <span class="s">next month</span>.</td></tr>
+            <tr><td>Negative</td><td class="f">subject + <span class="a">am/is/are not going to</span> + <span class="v">V1</span></td><td>He <span class="a">isn't going to</span> <span class="v">pass</span> <span class="s">if</span> he <span class="a">doesn't</span> <span class="v">study</span>.</td></tr>
+            <tr><td>Question</td><td class="f">(<span class="s">Wh-</span>) + <span class="a">am/is/are</span> + subject + <span class="a">going to</span> + <span class="v">V1</span>?</td><td>What <span class="a">are</span> you <span class="a">going to</span> <span class="v">do</span> <span class="s">when</span> you <span class="v">leave</span> university?</td></tr>
+          </tbody>
+        </table></div>
+        <ul class="uses">
+          <li><span class="k">Plan or intention made before now<span class="mini" data-icon="gtPlan"></span></span><span class="j">I <span class="a">am going to</span> <span class="v">move</span> to Italy <span class="s">next month</span>. We <span class="a">are going to</span> <span class="v">spend</span> our holidays in France <span class="s">next year</span>.</span></li>
+          <li><span class="k">Prediction from evidence now<span class="mini" data-icon="gtEvid"></span></span><span class="j">It<span class="a">'s</span> <span class="v">getting</span> late. You <span class="a">are going to</span> <span class="v">miss</span> your train. The water <span class="v">is</span> already very hot. It <span class="a">is going to</span> <span class="v">boil</span> <span class="s">in a minute</span>.</span></li>
+        </ul>
+      </section>
+
+      <section id="future-simple">
+        <div class="thead"><h4>Future simple (will)</h4><span data-icon="fs"></span></div>
+        <p>Opinions about the future, decisions taken at the moment of speaking, future facts, offers, promises, threats and requests.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Form</th><th>Structure</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Positive</td><td class="f">subject + <span class="a">will</span> ('ll) + <span class="v">V1</span></td><td><span class="s">Perhaps</span> I <span class="a">will</span> <span class="v">see</span> you <span class="s">tomorrow</span>.</td></tr>
+            <tr><td>Negative</td><td class="f">subject + <span class="a">will not</span> (won't) + <span class="v">V1</span></td><td>I <span class="s">don't think</span> the exam <span class="a">will</span> <span class="v">be</span> very difficult.</td></tr>
+            <tr><td>Question</td><td class="f">(<span class="s">Wh-</span>) + <span class="a">will</span> + subject + <span class="v">V1</span>?</td><td>What <span class="a">will</span> <span class="v">happen</span> <span class="s">if</span> the firm <span class="v">gets</span> reorganised?</td></tr>
+          </tbody>
+        </table></div>
+        <ul class="uses">
+          <li><span class="k">Opinion or belief<span class="mini" data-icon="fs"></span></span><span class="j">I <span class="s">think</span> you <span class="a">will</span> <span class="v">enjoy</span> this film. I <span class="s">hope</span> the weather <span class="a">will</span> <span class="v">be</span> nice <span class="s">when</span> you <span class="v">get</span> to Sardinia.</span></li>
+          <li><span class="k">Decision at the moment of speaking<span class="mini" data-icon="fsDecide"></span></span><span class="j">We <span class="v">seem</span> to <span class="v">be</span> lost. I<span class="a">'ll</span> <span class="v">stop</span> and <span class="v">ask</span> for the way home. <span class="v">Put</span> your wallet away. I <span class="a">will</span> <span class="v">pay</span> for the tickets.</span></li>
+          <li><span class="k">Future fact<span class="mini" data-icon="fsFact"></span></span><span class="j">He <span class="a">will</span> <span class="v">be</span> 50 <span class="s">next month</span>.</span></li>
+          <li><span class="k">Offer, promise, threat, request<span class="mini" data-icon="fsDecide"></span></span><span class="j">I <span class="a">will</span> <span class="v">be</span> careful, <span class="s">I promise</span>. <span class="v">Stop</span> that, or I<span class="a">'ll</span> <span class="v">tell</span> your parents. <span class="a">Will</span> you <span class="v">get</span> me some fruit?</span></li>
+          <li><span class="k">First conditional<span class="mini" data-icon="fsCond"></span></span><span class="j">I <span class="a">will</span> <span class="v">visit</span> you later <span class="s">if</span> I <span class="v">have</span> the time.</span></li>
+        </ul>
+        <div class="pair">
+          <div><span>I <span class="s">think</span> it <span class="a">will</span> <span class="v">rain</span> <span class="s">tomorrow</span>.</span><span class="gl">Weak prediction: an opinion.</span></div>
+          <div><span><span class="s">Look</span> at those grey clouds! It<span class="a">'s going to</span> <span class="v">rain</span>!</span><span class="gl">Strong prediction: the evidence is there now.</span></div>
+        </div>
+        <div class="pair">
+          <div><span>I <span class="a">am going to</span> <span class="v">move</span> to Italy.</span><span class="gl">Decided before: a plan.</span></div>
+          <div><span>I <span class="v">forgot</span> the car keys. - <span class="a">Don't</span> <span class="v">worry</span>, I <span class="a">will</span> <span class="v">get</span> them for you.</span><span class="gl">Decided now: an offer.</span></div>
+        </div>
+      </section>
+
+      <section id="signals-will-going-to">
+        <h4>Signal words</h4>
+        <div class="tbl"><table>
+          <thead><tr><th>Signal</th><th>Form</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><span class="s">Look!</span>, visible evidence, <span class="s">It's getting late</span></td><td>going to</td><td>Ted <span class="v">looks</span> very tired. He <span class="a">is going to</span> <span class="v">fall</span> asleep <span class="s">soon</span>.</td></tr>
+            <tr><td>a plan already made (<span class="s">next month</span>, <span class="s">next year</span>)</td><td>going to</td><td>Paul <span class="a">is going to</span> <span class="v">learn</span> French.</td></tr>
+            <tr><td><span class="s">think</span>, <span class="s">believe</span>, <span class="s">expect</span>, <span class="s">hope</span>, <span class="s">be sure</span>, <span class="s">be afraid</span>, <span class="s">probably</span>, <span class="s">perhaps</span>, <span class="s">possibly</span>, <span class="s">certainly</span>, <span class="s">I suppose</span></td><td>will</td><td>I <span class="s">suppose</span> real estate prices <span class="a">will</span> <span class="v">go</span> up again <span class="s">next year</span>.</td></tr>
+            <tr><td><span class="s">I promise</span>, <span class="s">or</span> (threat), <span class="s">Will you ...?</span> (request)</td><td>will</td><td><span class="v">Give</span> me all your money <span class="s">or</span> I <span class="a">will</span> <span class="v">shoot</span> you.</td></tr>
+            <tr><td><span class="s">if</span> + present simple</td><td>will (main clause)</td><td>You <span class="a">will</span> <span class="v">burn</span> yourself <span class="s">if</span> you <span class="v">touch</span> the stove.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small">With <span class="s">I think</span> both forms are possible when there is some evidence: <span class="v">Take</span> the umbrella. I <span class="s">think</span> it <span class="a">will</span> <span class="v">rain</span> / it <span class="a">is going to</span> <span class="v">rain</span> in the afternoon.</p>
+      </section>
+    </div>
+
+    <!-- 2.3 -->
+    <div class="sub" id="future-continuous-perfect">
+      <header><h3><span class="n">2.3</span>Future continuous and future perfect</h3><p>All three forms use <span class="a">will</span> and look at a precise moment in the future: is the action going on at that moment, already finished, or how long has it lasted?</p></header>
+
+      <section id="future-continuous">
+        <div class="thead"><h4>Future continuous</h4><span data-icon="fc"></span></div>
+        <p>An action that will be in progress at an exact time in the future.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Form</th><th>Structure</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Positive</td><td class="f">subject + <span class="a">will be</span> + <span class="v">V-ing</span></td><td>I <span class="a">will be</span> <span class="v">teaching</span> <span class="s">at 8:00 pm tomorrow</span>.</td></tr>
+            <tr><td>Negative</td><td class="f">subject + <span class="a">won't be</span> + <span class="v">V-ing</span></td><td><span class="a">Don't</span> <span class="v">call</span> at 6.00. I <span class="a">won't be</span> <span class="v">answering</span>: I <span class="a">will be</span> <span class="v">doing</span> my homework <span class="s">then</span>.</td></tr>
+            <tr><td>Question</td><td class="f">(<span class="s">Wh-</span>) + <span class="a">will</span> + subject + <span class="a">be</span> + <span class="v">V-ing</span>?</td><td>Where <span class="a">will</span> you <span class="a">be</span> <span class="v">working</span> <span class="s">in ten years' time</span>?</td></tr>
+          </tbody>
+        </table></div>
+        <ul class="uses">
+          <li><span class="k">In progress at a precise future time<span class="mini" data-icon="fc"></span></span><span class="j"><span class="s">At this time tomorrow</span>, I <span class="a">will be</span> <span class="v">teaching</span>. <span class="s">This time next week</span> he <span class="a">will be</span> <span class="v">camping</span> in the mountains.</span></li>
+          <li><span class="k">Going on when another action happens<span class="mini" data-icon="fcInt"></span></span><span class="j">The baby <span class="a">will be</span> <span class="v">sleeping</span> <span class="s">when</span> you <span class="v">call</span> Mrs Stevenson.</span></li>
+          <li><span class="k">Already planned, or part of a routine<span class="mini" data-icon="fcPlan"></span></span><span class="j">I <span class="a">will be</span> <span class="v">driving</span> into town <span class="s">later on</span>. <span class="a">Can</span> I <span class="v">give</span> you a lift?</span></li>
+          <li><span class="k">Polite question about plans</span><span class="j"><span class="a">Will</span> you <span class="a">be</span> <span class="v">going</span> out <span class="s">this evening</span>? <span class="a">Will</span> you <span class="a">be</span> <span class="v">using</span> your car <span class="s">at the weekend</span>?</span></li>
+        </ul>
+        <div class="pair">
+          <div><span><span class="s">At this time tomorrow</span>, I <span class="a">will be</span> <span class="v">teaching</span>.</span><span class="gl">Future continuous: in progress at a future moment.</span></div>
+          <div><span><span class="s">At this time yesterday</span>, I <span class="a">was</span> <span class="v">teaching</span>.</span><span class="gl">Past continuous: the same idea at a past moment.</span></div>
+        </div>
+      </section>
+
+      <section id="future-perfect">
+        <div class="thead"><h4>Future perfect</h4><span data-icon="fp"></span></div>
+        <p>An action that will be completed at some point before a fixed moment in the future.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Form</th><th>Structure</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Positive</td><td class="f">subject + <span class="a">will have</span> + <span class="v">V3</span></td><td>I <span class="a">will have</span> <span class="v">finished</span> my homework <span class="s">by next Wednesday</span>.</td></tr>
+            <tr><td>Negative</td><td class="f">subject + <span class="a">won't have</span> + <span class="v">V3</span></td><td>You <span class="a">won't have</span> <span class="v">lost</span> enough weight to fit into those trousers <span class="s">by next week</span>.</td></tr>
+            <tr><td>Question</td><td class="f">(<span class="s">Wh-</span>) + <span class="a">will</span> + subject + <span class="a">have</span> + <span class="v">V3</span>?</td><td><span class="a">Will</span> you <span class="a">have</span> <span class="v">finished</span> baking the cake <span class="s">before</span> the guests <span class="v">arrive</span>?</td></tr>
+          </tbody>
+        </table></div>
+        <ul class="uses">
+          <li><span class="k">Completed before a future point<span class="mini" data-icon="fp"></span></span><span class="j"><span class="s">By the time</span> we <span class="v">get</span> there, the play <span class="a">will have</span> <span class="v">begun</span>. I <span class="a">haven't</span> <span class="v">finished</span> my homework <span class="s">yet</span>, but I <span class="a">will have</span> <span class="v">finished</span> it <span class="s">by next Wednesday</span>.</span></li>
+          <li><span class="k">How much or how many by then<span class="mini" data-icon="fpAmount"></span></span><span class="j"><span class="s">By the end of next year</span> he <span class="a">will have</span> <span class="v">planted</span> 2,000 trees. <span class="s">When</span> he <span class="v">reaches</span> Land's End, he <span class="a">will have</span> <span class="v">walked</span> 1,500 miles.</span></li>
+          <li><span class="k">State up to a future point (state verbs)<span class="mini" data-icon="fpState"></span></span><span class="j"><span class="s">By 2030</span> we <span class="a">will have</span> <span class="v">known</span> each other <span class="s">for</span> 30 years. <span class="s">By next Christmas</span>, they <span class="a">will have</span> <span class="v">been</span> married <span class="s">for</span> twenty-five years.</span></li>
+        </ul>
+      </section>
+
+      <section id="future-perfect-continuous">
+        <div class="thead"><h4>Future perfect continuous</h4><span data-icon="fpc"></span></div>
+        <p>The length of an activity, measured at a point in the future.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Form</th><th>Structure</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Positive</td><td class="f">subject + <span class="a">will have been</span> + <span class="v">V-ing</span></td><td><span class="s">By next July</span>, I <span class="a">will have been</span> <span class="v">teaching</span> <span class="s">for</span> twenty years.</td></tr>
+            <tr><td>Negative</td><td class="f">subject + <span class="a">won't have been</span> + <span class="v">V-ing</span></td><td><span class="s">By Friday</span> he <span class="a">won't have been</span> <span class="v">working</span> here <span class="s">for</span> a month.</td></tr>
+            <tr><td>Question</td><td class="f"><span class="s">How long</span> + <span class="a">will</span> + subject + <span class="a">have been</span> + <span class="v">V-ing</span>?</td><td><span class="s">How long</span> <span class="a">will</span> you <span class="a">have been</span> <span class="v">living</span> here <span class="s">by</span> then?</td></tr>
+          </tbody>
+        </table></div>
+        <ul class="uses">
+          <li><span class="k">Duration up to a future point<span class="mini" data-icon="fpc"></span></span><span class="j"><span class="s">By the time</span> she <span class="v">retires</span>, she <span class="a">will have been</span> <span class="v">teaching</span> <span class="s">for</span> forty years. <span class="s">By midnight</span>, we <span class="a">will have been</span> <span class="v">travelling</span> <span class="s">for</span> twelve hours.</span></li>
+        </ul>
+        <div class="pair">
+          <div><span><span class="s">By midnight</span>, she <span class="a">will have been</span> <span class="v">studying</span> <span class="s">for</span> ten hours.</span><span class="gl">The activity and its length.</span></div>
+          <div><span><span class="s">By the end of the day</span>, I <span class="a">will have</span> <span class="v">written</span> twenty emails.</span><span class="gl">The result: what is finished, or how many.</span></div>
+        </div>
+      </section>
+
+      <section id="signals-future-continuous-perfect">
+        <h4>Signal words</h4>
+        <div class="tbl"><table>
+          <thead><tr><th>Signal</th><th>Form</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><span class="s">at this time tomorrow</span>, <span class="s">this time next week</span>, <span class="s">at 8 pm tomorrow</span>, <span class="s">then</span></td><td>Future continuous</td><td><span class="s">This time next week</span> I <span class="a">will be</span> <span class="v">lying</span> on the beach in Australia.</td></tr>
+            <tr><td><span class="s">by</span> + future time, <span class="s">by the time</span> + present simple, <span class="s">by the end of</span>, <span class="s">by the age of</span>, <span class="s">in a week's time</span>, <span class="s">in ten years' time</span></td><td>Future perfect</td><td><span class="s">In ten years' time</span>, everyone <span class="a">will have</span> <span class="v">forgotten</span> about his book.</td></tr>
+            <tr><td><span class="s">by</span> + future time + <span class="s">for</span> + length</td><td>Future perfect continuous</td><td><span class="s">This time next month</span>, he <span class="a">will have been</span> <span class="v">working</span> on the same project <span class="s">for</span> a year.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small"><span class="s">This time next month</span> + <span class="s">for a year</span> asks for the future perfect continuous, while <span class="s">this time next month</span> alone asks for the future continuous: the length of time decides.</p>
+      </section>
+
+      <div class="callout">
+        <h4>One question, five futures</h4>
+        <p>The same question can be asked with every future form; the meaning changes only slightly.</p>
+        <ul>
+          <li>What time <span class="a">does</span> the next train <span class="v">arrive</span>? (timetable)</li>
+          <li>What time <span class="a">is</span> the next train <span class="v">arriving</span>? (arrangement)</li>
+          <li>What time <span class="a">is</span> the next train <span class="a">going to</span> <span class="v">arrive</span>? (plan or expectation)</li>
+          <li>What time <span class="a">will</span> the next train <span class="v">arrive</span>? (neutral future)</li>
+          <li>What time <span class="a">will</span> the next train <span class="a">be</span> <span class="v">arriving</span>? (in progress or planned, very polite)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2.4 -->
+    <div class="sub" id="time-clauses">
+      <header><h3><span class="n">2.4</span>Time clauses and by the time</h3><p>A sentence about the future often has two parts: the main action, with a future form, and a time clause, with a present form.</p></header>
+      <p class="rule">After <span class="s">if</span>, <span class="s">when</span>, <span class="s">as soon as</span>, <span class="s">before</span>, <span class="s">after</span>, <span class="s">until</span>, <span class="s">unless</span>, <span class="s">while</span> and <span class="s">once</span>, use the present simple even when the meaning is future.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Order</th><th>Structure</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Time clause first</td><td class="f"><span class="s">time word</span> + subject + <span class="v">V1</span>(s), subject + <span class="a">will</span> + <span class="v">V1</span></td><td><span class="s">As soon as</span> I <span class="v">see</span> her, I <span class="a">will</span> <span class="v">say</span> hi.</td></tr>
+          <tr><td>Main clause first</td><td class="f">subject + <span class="a">will</span> + <span class="v">V1</span> + <span class="s">time word</span> + subject + <span class="v">V1</span>(s)</td><td>I <span class="a">will</span> <span class="v">say</span> hi <span class="s">as soon as</span> I <span class="v">see</span> her.</td></tr>
+        </tbody>
+      </table></div>
+      <p>With the time clause first, a comma separates the two parts. To stress that the first action is finished, the time clause can use the present perfect: I<span class="a">'ll</span> <span class="v">get</span> down to work <span class="s">after</span> I <span class="a">have</span> <span class="v">written</span> this e-mail.</p>
+      <div class="pair">
+        <div><span><span class="x">✗</span> <del>If I will see her, I will say hi.</del></span><span class="gl">No will in the time or condition clause.</span></div>
+        <div><span><span class="ok">✓</span> <span class="s">If</span> I <span class="v">see</span> her, I <span class="a">will</span> <span class="v">say</span> hi.</span><span class="gl">Present simple in the clause, will in the main part.</span></div>
+      </div>
+
+      <section id="by-the-time">
+        <div class="thead"><h4>by the time</h4><span data-icon="fp"></span></div>
+        <p><span class="s">By the time</span> fixes the reference point; the tense of the clause tells you which perfect to use in the main part.</p>
+        <figure>
+          <svg viewBox="0 0 560 150" role="img" aria-label="By the time: past perfect before a past moment, future perfect before a future moment">
+            <line x1="16" y1="80" x2="536" y2="80" stroke="var(--muted)" stroke-width="1.6"/>
+            <path d="M536 75 L546 80 L536 85 Z" fill="var(--muted)"/>
+            <line x1="280" y1="30" x2="280" y2="118" stroke="var(--sig)" stroke-width="1.6" stroke-dasharray="4 4"/>
+            <text x="280" y="134" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--sig)">now</text>
+            <path d="M74 72 L90 88 M90 72 L74 88" stroke="var(--mark)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M88 68 Q130 40 173 68" fill="none" stroke="var(--aux)" stroke-width="2"/>
+            <path d="M166 63 L175 69 L164 71 Z" fill="var(--aux)"/>
+            <line x1="180" y1="64" x2="180" y2="96" stroke="var(--aux)" stroke-width="4" stroke-linecap="round"/>
+            <text x="82" y="108" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--verb)">had begun</text>
+            <text x="180" y="112" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--aux)">we got there</text>
+            <path d="M346 72 L362 88 M362 72 L346 88" stroke="var(--mark)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M360 68 Q416 36 471 68" fill="none" stroke="var(--aux)" stroke-width="2"/>
+            <path d="M464 63 L473 69 L462 71 Z" fill="var(--aux)"/>
+            <line x1="478" y1="64" x2="478" y2="96" stroke="var(--aux)" stroke-width="4" stroke-linecap="round"/>
+            <text x="354" y="108" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--verb)">will have begun</text>
+            <text x="478" y="112" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--aux)">we get there</text>
+            <text x="130" y="24" text-anchor="middle" font-family="Familjen Grotesk, sans-serif" font-size="13" font-weight="600" fill="var(--fg)">past perfect</text>
+            <text x="412" y="24" text-anchor="middle" font-family="Familjen Grotesk, sans-serif" font-size="13" font-weight="600" fill="var(--fg)">future perfect</text>
+          </svg>
+          <figcaption>By the time we got there, the play had already begun (left: everything in the past). By the time we get there, the play will have begun (right: everything in the future). The X is the earlier action, the blue bar is the moment fixed by "by the time".</figcaption>
+        </figure>
+        <ul class="uses">
+          <li><span class="k">by the time + present simple<span class="mini" data-icon="fp"></span></span><span class="j"><span class="s">By the time</span> we <span class="v">get</span> there, the play <span class="a">will have</span> <span class="v">begun</span>. <span class="s">By the time</span> I <span class="v">arrive</span> home, the workers <span class="a">will have</span> <span class="v">finished</span> repairing my TV set.</span></li>
+          <li><span class="k">by the time + past simple<span class="mini" data-icon="pp"></span></span><span class="j"><span class="s">By the time</span> we <span class="v">got</span> there, the play <span class="a">had</span> already <span class="v">begun</span>. <span class="s">By the time</span> I <span class="v">got</span> to the restaurant, it <span class="a">had</span> already <span class="v">closed</span>.</span></li>
+        </ul>
+      </section>
+
+      <section id="signals-time-clauses">
+        <h4>Signal words</h4>
+        <div class="tbl"><table>
+          <thead><tr><th>Signal</th><th>Form</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><span class="s">when</span>, <span class="s">as soon as</span>, <span class="s">before</span>, <span class="s">after</span>, <span class="s">until</span>, <span class="s">while</span>, <span class="s">once</span></td><td>Present simple in the clause, will in the main part</td><td>I <span class="a">will</span> <span class="v">buy</span> him one <span class="s">when</span> I <span class="v">go</span> downtown.</td></tr>
+            <tr><td><span class="s">if</span>, <span class="s">unless</span>, <span class="s">as long as</span></td><td>Present simple in the clause, will in the main part</td><td>It<span class="a">'s</span> <span class="v">freezing</span> outside. You <span class="a">will</span> <span class="v">get</span> a cold <span class="s">if</span> you <span class="v">go</span> out.</td></tr>
+            <tr><td><span class="s">by the time</span> + present simple</td><td>Future perfect</td><td><span class="s">By the time</span> you <span class="v">arrive</span>, I <span class="a">will have</span> <span class="v">finished</span> my homework.</td></tr>
+            <tr><td><span class="s">by the time</span> + past simple</td><td>Past perfect</td><td><span class="s">By the time</span> you <span class="v">called</span>, I <span class="a">had</span> already <span class="v">recovered</span> from the accident.</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+    </div>
+
+    <!-- 2.5 -->
+    <div class="sub" id="perfect-family">
+      <header><h3><span class="n">2.5</span>The perfect family</h3><p>The six perfect tenses share <span class="a">have</span> + <span class="v">V3</span>: each one looks back from a reference point (now, a past moment or a future moment) at something that happened or lasted before it.</p></header>
+      <p class="rule">Past perfect with the past simple, present perfect with the present, future perfect with a present simple time clause or by + a future time.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Tense</th><th>Timeline</th><th>Structure</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Present perfect</td><td data-icon="prp"></td><td class="f">subject + <span class="a">have/has</span> (<span class="a">haven't/hasn't</span>) + <span class="v">V3</span></td><td>She <span class="a">has</span> <span class="v">lost</span> her keys, so she <span class="a">can't</span> <span class="v">get</span> into the house.</td></tr>
+          <tr><td>Present perfect continuous</td><td data-icon="prpc"></td><td class="f">subject + <span class="a">have/has</span> (<span class="a">haven't/hasn't</span>) <span class="a">been</span> + <span class="v">V-ing</span></td><td>I <span class="a">have been</span> <span class="v">waiting</span> <span class="s">for</span> over an hour and the bus still <span class="a">hasn't</span> <span class="v">come</span>.</td></tr>
+          <tr><td>Past perfect</td><td data-icon="pp"></td><td class="f">subject + <span class="a">had</span> (<span class="a">hadn't</span>) + <span class="v">V3</span></td><td><span class="s">When</span> I <span class="v">got</span> to the cinema, the film <span class="a">had</span> <span class="s">already</span> <span class="v">started</span>.</td></tr>
+          <tr><td>Past perfect continuous</td><td data-icon="ppc"></td><td class="f">subject + <span class="a">had</span> (<span class="a">hadn't</span>) <span class="a">been</span> + <span class="v">V-ing</span></td><td>Sarah <span class="v">was</span> tired <span class="s">because</span> she <span class="a">had been</span> <span class="v">studying</span> <span class="s">all night</span>.</td></tr>
+          <tr><td>Future perfect</td><td data-icon="fp"></td><td class="f">subject + <span class="a">will/won't have</span> + <span class="v">V3</span></td><td><span class="s">By the time</span> you <span class="v">arrive</span>, I <span class="a">will have</span> <span class="v">finished</span> my homework.</td></tr>
+          <tr><td>Future perfect continuous</td><td data-icon="fpc"></td><td class="f">subject + <span class="a">will/won't have been</span> + <span class="v">V-ing</span></td><td><span class="s">By midnight</span>, we <span class="a">will have been</span> <span class="v">travelling</span> <span class="s">for</span> twelve hours.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">Questions put the first auxiliary before the subject: <span class="a">Have</span> you ever <span class="v">watched</span> a thriller? <span class="a">Had</span> they <span class="v">heard</span> about the film? <span class="a">Will</span> you <span class="a">have</span> <span class="v">finished</span> by then? <span class="s">How long</span> <span class="a">have</span> you <span class="a">been</span> <span class="v">learning</span> English?</p>
+
+      <section id="perfect-present">
+        <div class="thead"><h4>Present perfect and present perfect continuous</h4><span data-icon="prp"></span></div>
+        <p>From now, looking back. Full rules in Lesson 02; here the uses that appear in this lesson's exercises.</p>
+        <ul class="uses">
+          <li><span class="k">Experience, time not stated<span class="mini" data-icon="prp"></span></span><span class="j"><span class="a">Have</span> you <span class="s">ever</span> <span class="v">watched</span> a thriller? We <span class="a">have</span> <span class="s">never</span> ever <span class="v">heard</span> anything like this before.</span></li>
+          <li><span class="k">Result in the present<span class="mini" data-icon="prpRes"></span></span><span class="j">She <span class="a">has</span> <span class="v">lost</span> her keys, so she <span class="a">can't</span> <span class="v">get</span> into the house.</span></li>
+          <li><span class="k">Recent news (just, already, yet)<span class="mini" data-icon="prpJust"></span></span><span class="j">Hooray! I <span class="a">have</span> <span class="s">just</span> <span class="v">won</span> the jackpot! He <span class="a">has not</span> <span class="v">finished</span> his report <span class="s">yet</span>.</span></li>
+          <li><span class="k">Time not over yet<span class="mini" data-icon="prpUnfin"></span></span><span class="j">I <span class="a">have</span> <span class="v">read</span> three books <span class="s">this month</span>.</span></li>
+          <li><span class="k">State up to now (for, since)<span class="mini" data-icon="prpState"></span></span><span class="j">They <span class="a">have</span> <span class="v">known</span> each other <span class="s">since</span> primary school. He <span class="a">has</span> <span class="v">worked</span> here <span class="s">since</span> 2022.</span></li>
+          <li><span class="k">Activity up to now, with its length<span class="mini" data-icon="prpcDur"></span></span><span class="j">I <span class="a">have been</span> <span class="v">waiting</span> <span class="s">for</span> over an hour and the bus still <span class="a">hasn't</span> <span class="v">come</span>. <span class="s">How long</span> <span class="a">have</span> you <span class="a">been</span> <span class="v">learning</span> English?</span></li>
+          <li><span class="k">Activity with a visible result now<span class="mini" data-icon="prpcRes"></span></span><span class="j"><span class="s">Look</span>! The children <span class="v">are</span> covered in paint. They <span class="a">have been</span> <span class="v">decorating</span> the room. He <span class="v">is</span> out of breath <span class="s">because</span> he <span class="a">has been</span> <span class="v">running</span>.</span></li>
+          <li><span class="k">Recent repeated activity<span class="mini" data-icon="prpcRecent"></span></span><span class="j">He <span class="a">has been</span> <span class="v">practising</span> the guitar every day <span class="s">recently</span>, and he <span class="a">is</span> <span class="v">improving</span> quickly.</span></li>
+        </ul>
+      </section>
+
+      <section id="perfect-past">
+        <div class="thead"><h4>Past perfect and past perfect continuous</h4><span data-icon="pp"></span></div>
+        <p>From a past moment, looking further back. Full rules in Lesson 01.</p>
+        <ul class="uses">
+          <li><span class="k">Completed before a past moment<span class="mini" data-icon="pp"></span></span><span class="j">We <span class="v">got</span> to the station late, so the train <span class="a">had</span> <span class="s">already</span> <span class="v">left</span>. Jane <span class="a">had</span> <span class="s">already</span> <span class="v">left</span> her husband <span class="s">when</span> she <span class="v">met</span> Josh.</span></li>
+          <li><span class="k">Experience up to a past moment<span class="mini" data-icon="ppExp"></span></span><span class="j">Tom <span class="a">had</span> <span class="s">never</span> <span class="v">been</span> abroad <span class="s">before</span> last summer. Jimmy <span class="a">had</span> <span class="s">never</span> <span class="v">been</span> to a concert <span class="s">until</span> last week.</span></li>
+          <li><span class="k">Duration before a past moment<span class="mini" data-icon="ppc"></span></span><span class="j"><span class="s">By the time</span> he <span class="v">came</span> home, the children <span class="a">had been</span> <span class="v">sleeping</span> <span class="s">for</span> hours. They <span class="a">had been</span> <span class="v">learning</span> English <span class="s">for</span> 4 years <span class="s">when</span> they first <span class="v">got</span> the opportunity to <span class="v">visit</span> England.</span></li>
+          <li><span class="k">Cause of a past state<span class="mini" data-icon="ppcCause"></span></span><span class="j">The ground <span class="v">was</span> wet <span class="s">because</span> it <span class="a">had been</span> <span class="v">raining</span>. I <span class="v">was</span> hungry <span class="s">because</span> I <span class="a">had not</span> <span class="v">eaten</span> all day.</span></li>
+        </ul>
+      </section>
+
+      <section id="signals-perfect">
+        <h4>Signal words</h4>
+        <div class="tbl"><table>
+          <thead><tr><th>Signal</th><th>Form</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><span class="s">yet</span>, <span class="s">already</span>, <span class="s">just</span>, <span class="s">recently</span>, <span class="s">ever</span>, <span class="s">never</span>, <span class="s">since</span>, <span class="s">for</span>, <span class="s">this week/month/year</span></td><td>Present perfect</td><td>She <span class="a">has not</span> <span class="v">finished</span> her book <span class="s">yet</span>.</td></tr>
+            <tr><td><span class="s">for</span>, <span class="s">since</span>, <span class="s">all day</span>, <span class="s">all morning</span>, <span class="s">recently</span>, <span class="s">how long</span></td><td>Present perfect continuous</td><td>I <span class="a">have been</span> <span class="v">studying</span> <span class="s">all afternoon</span>.</td></tr>
+            <tr><td><span class="s">before</span>, <span class="s">after</span>, <span class="s">already</span>, <span class="s">when</span> + past event, <span class="s">by the time</span> + past event</td><td>Past perfect</td><td>The train <span class="a">had</span> <span class="v">left</span> <span class="s">before</span> we <span class="v">arrived</span>.</td></tr>
+            <tr><td><span class="s">for hours</span>, <span class="s">all day/night</span>, <span class="s">because</span>, tired / exhausted, <span class="s">before</span> + past event</td><td>Past perfect continuous</td><td>She <span class="a">had been</span> <span class="v">working</span> <span class="s">all day</span>, so she <span class="v">was</span> tired.</td></tr>
+            <tr><td><span class="s">by</span> + future time, <span class="s">by next week/month/year</span>, <span class="s">by the age of</span>, <span class="s">by the end of</span>, <span class="s">by the time</span> + present simple</td><td>Future perfect</td><td>They <span class="a">will have</span> <span class="v">completed</span> the project <span class="s">by Friday</span>.</td></tr>
+            <tr><td><span class="s">by</span> + future time + <span class="s">for</span>, <span class="s">by the time</span> ... <span class="s">for</span></td><td>Future perfect continuous</td><td><span class="s">By next July</span>, I <span class="a">will have been</span> <span class="v">teaching</span> <span class="s">for</span> twenty years.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small"><span class="s">for</span>, <span class="s">since</span>, <span class="s">recently</span> and <span class="s">all day</span> appear in more than one row: the simple form gives the result or the number (I <span class="a">have</span> <span class="v">read</span> three books), the continuous form gives the activity and its length (I <span class="a">have been</span> <span class="v">reading</span> <span class="s">all day</span>). With state verbs only the simple form is possible.</p>
+      </section>
+
+      <div class="callout">
+        <h4>Watch out</h4>
+        <ul>
+          <li>State verbs (<span class="v">know</span>, <span class="v">be</span>, <span class="v">own</span>, <span class="v">love</span>) stay simple in every perfect tense: <span class="s">How long</span> <span class="a">have</span> you <span class="v">known</span> your best friend? <span class="s">By next Christmas</span> they <span class="a">will have</span> <span class="v">been</span> married <span class="s">for</span> twenty-five years.</li>
+          <li>Two past actions going on at the same time take the past continuous, not a perfect tense: I <span class="a">was</span> <span class="v">reading</span> <span class="s">while</span> she <span class="a">was</span> <span class="v">seeing</span> the doctor.</li>
+          <li>With <span class="s">before</span> or <span class="s">after</span> the order of two past actions is already clear, so the past simple is often possible too: <span class="s">Before</span> I <span class="v">left</span> for school, I <span class="a">had</span> <span class="v">checked</span> / I <span class="v">checked</span> my mail.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 3 -->
+  <div class="world w3" id="words">
+    <header>
+      <span class="eyebrow">Part 3</span>
+      <h2>Words and sounds</h2>
+    </header>
+    <div class="sub" id="irregular-verbs">
+      <header><h3>Irregular verbs and spelling</h3><p>The irregular verbs used in this lesson's examples and exercises, with the past participle (V3) needed by all perfect tenses.</p></header>
+      <div class="tbl irr"><table>
+        <thead><tr><th>V1</th><th>V2</th><th>V3</th></tr></thead>
+        <tbody>
+          <tr><td>be</td><td>was / were</td><td>been</td></tr>
+          <tr><td>begin</td><td>began</td><td>begun</td></tr>
+          <tr><td>buy</td><td>bought</td><td>bought</td></tr>
+          <tr><td>catch</td><td>caught</td><td>caught</td></tr>
+          <tr><td>do</td><td>did</td><td>done</td></tr>
+          <tr><td>drink</td><td>drank</td><td>drunk</td></tr>
+          <tr><td>eat</td><td>ate</td><td>eaten</td></tr>
+          <tr><td>fall</td><td>fell</td><td>fallen</td></tr>
+          <tr><td>forget</td><td>forgot</td><td>forgotten</td></tr>
+          <tr><td>get</td><td>got</td><td>got</td></tr>
+          <tr><td>go</td><td>went</td><td>gone / been</td></tr>
+          <tr><td>have</td><td>had</td><td>had</td></tr>
+          <tr><td>hear</td><td>heard</td><td>heard</td></tr>
+          <tr><td>know</td><td>knew</td><td>known</td></tr>
+          <tr><td>leave</td><td>left</td><td>left</td></tr>
+          <tr><td>lie (lie down)</td><td>lay</td><td>lain</td></tr>
+          <tr><td>lose</td><td>lost</td><td>lost</td></tr>
+          <tr><td>make</td><td>made</td><td>made</td></tr>
+          <tr><td>meet</td><td>met</td><td>met</td></tr>
+          <tr><td>pay</td><td>paid</td><td>paid</td></tr>
+          <tr><td>read</td><td>read</td><td>read</td></tr>
+          <tr><td>run</td><td>ran</td><td>run</td></tr>
+          <tr><td>see</td><td>saw</td><td>seen</td></tr>
+          <tr><td>shoot</td><td>shot</td><td>shot</td></tr>
+          <tr><td>sleep</td><td>slept</td><td>slept</td></tr>
+          <tr><td>spend</td><td>spent</td><td>spent</td></tr>
+          <tr><td>take</td><td>took</td><td>taken</td></tr>
+          <tr><td>teach</td><td>taught</td><td>taught</td></tr>
+          <tr><td>tell</td><td>told</td><td>told</td></tr>
+          <tr><td>wear</td><td>wore</td><td>worn</td></tr>
+          <tr><td>win</td><td>won</td><td>won</td></tr>
+          <tr><td>write</td><td>wrote</td><td>written</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="uses">
+        <li><span class="k">-ing after -ie</span><span class="j">ie becomes y: lie → <span class="v">lying</span>. This time next week I <span class="a">will be</span> <span class="v">lying</span> on the beach.</span></li>
+        <li><span class="k">Doubled l</span><span class="j">In British English a final l after one short vowel doubles: travel → <span class="v">travelling</span>, <span class="v">travelled</span> (American: traveling).</span></li>
+        <li><span class="k">practise / practice</span><span class="j">British English: practise is the verb, practice is the noun. She <span class="a">had been</span> <span class="v">practising</span> the piano; piano practice. American English uses practice for both.</span></li>
+        <li><span class="k">got / gotten</span><span class="j">British English uses got as V3 of get: She <span class="a">has</span> <span class="v">got</span> good marks. American English often uses gotten.</span></li>
+        <li><span class="k">been / gone</span><span class="j"><span class="a">has</span> <span class="v">been</span> to = went and came back; <span class="a">has</span> <span class="v">gone</span> to = went and is still there. <span class="s">By the time</span> he <span class="v">called</span>, she <span class="a">had</span> already <span class="v">gone</span> out.</span></li>
+      </ul>
+      <p class="small">British vocabulary in this lesson: at the weekend (American: on the weekend), maths (math), film (movie), shop (store), Mrs without a full stop (Mrs.).</p>
+    </div>
+  </div>
+
+  <footer>Lesson 03 - Future and Perfect Tenses - 14 October 2026</footer>
+</div>
+
+<script>
+(function () {
+  function wave(x1, x2, y, amp, step) {
+    step = step || 6; let d = `M${x1} ${y}`, up = true;
+    for (let x = x1; x < x2; x += step) { const nx = Math.min(x + step, x2); d += ` Q${(x + nx) / 2} ${up ? y - amp : y + amp} ${nx} ${y}`; up = !up; }
+    return d;
+  }
+  const w = document.getElementById("w1"); if (w) w.setAttribute("d", wave(40, 500, 56, 7, 10));
+
+  const NOW = 120, Y = 30;
+  const SPECS = {
+    prsTime: { x: [182], tag: [182, "at 9"], label: "Present simple: timetable" },
+    prsClause: { x: [150, 186], small: true, arrow: [150, 186], label: "Present simple in a time clause" },
+    prcPlan: { dotted: [120, 182], x: [182], label: "Present continuous: arrangement" },
+    gtPlan: { ref: 76, dotted: [120, 182], x: [182], label: "Going to: plan made before now" },
+    gtEvid: { bar: [92, 120], arrow: [120, 166], x: [166], label: "Going to: prediction from evidence now" },
+    fs: { x: [182], label: "Future simple" },
+    fsDecide: { x: [150], arrow: [120, 150], label: "Future simple: decision at the moment of speaking" },
+    fsFact: { x: [196], tag: [196, "next month"], label: "Future simple: future fact" },
+    fsCond: { x: [150, 190], small: true, arrow: [150, 190], label: "Future simple: first conditional" },
+    fc: { wave: [150, 214], ref: 182, tag: [182, "7 pm"], label: "Future continuous" },
+    fcInt: { wave: [148, 216], x: [190], label: "Future continuous: interrupted" },
+    fcPlan: { dotted: [120, 164], wave: [164, 214], label: "Future continuous: planned or routine" },
+    fp: { x: [150], arrow: [150, 202], ref: 202, label: "Future perfect" },
+    fpAmount: { bar: [136, 200], brace: [136, 200, "2,000 trees"], ref: 200, label: "Future perfect: amount by a future point" },
+    fpState: { bar: [60, 202], brace: [60, 202, "for 30 years"], ref: 202, label: "Future perfect: state up to a future point" },
+    fpc: { wave: [60, 202], ref: 202, brace: [60, 202, "for forty years"], label: "Future perfect continuous" },
+    prp: { x: [46, 80], arrow: [80, 120], label: "Present perfect" },
+    prpRes: { x: [90], arrow: [90, 120], label: "Present perfect: result in the present" },
+    prpJust: { x: [106], small: true, arrow: [106, 120], label: "Present perfect: recent news" },
+    prpUnfin: { x: [84], brace: [56, 160, "this month"], label: "Present perfect: time not over yet" },
+    prpState: { bar: [44, 120], brace: [44, 120, "since 2022"], label: "Present perfect: state up to now" },
+    prpc: { wave: [46, 120], label: "Present perfect continuous" },
+    prpcDur: { wave: [46, 120], brace: [46, 120, "for an hour"], label: "Present perfect continuous: duration up to now" },
+    prpcRes: { wave: [40, 110], ref: 120, label: "Present perfect continuous: result now" },
+    prpcRecent: { wave: [76, 120], brace: [76, 120, "recently"], label: "Present perfect continuous: recent activity" },
+    pp: { x: [38], arrow: [38, 88], ref: 88, label: "Past perfect" },
+    ppExp: { x: [30, 56], small: true, ref: 92, label: "Past perfect: experience up to a past moment" },
+    ppc: { wave: [24, 90], ref: 90, brace: [24, 90, "for hours"], label: "Past perfect continuous" },
+    ppcCause: { wave: [24, 82], ref: 92, label: "Past perfect continuous: cause of a past state" }
+  };
+
+  const T = (x, y, t, fill) => `<text x="${x}" y="${y}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="${fill}">${t}</text>`;
+  function xm(x, r) { return `<path d="M${x - r} ${Y - r} L${x + r} ${Y + r} M${x + r} ${Y - r} L${x - r} ${Y + r}" stroke="var(--mark)" stroke-width="2.6" stroke-linecap="round"/>`; }
+  function icon(sp) {
+    let s = `<svg viewBox="0 0 240 54" role="img" aria-label="${sp.label} timeline">`;
+    s += `<line x1="8" y1="${Y}" x2="226" y2="${Y}" stroke="var(--muted)" stroke-width="1.4"/>`;
+    s += `<path d="M226 ${Y - 4} L234 ${Y} L226 ${Y + 4} Z" fill="var(--muted)"/>`;
+    s += `<line x1="${NOW}" y1="10" x2="${NOW}" y2="42" stroke="var(--sig)" stroke-width="1.4" stroke-dasharray="3 3"/>`;
+    s += T(NOW, 52, "now", "var(--sig)");
+    if (sp.bar) s += `<line x1="${sp.bar[0]}" y1="${Y}" x2="${sp.bar[1]}" y2="${Y}" stroke="var(--verb)" stroke-width="5" stroke-linecap="round"/>`;
+    if (sp.wave) s += `<path d="${wave(sp.wave[0], sp.wave[1], Y, 5)}" fill="none" stroke="var(--verb)" stroke-width="2.6" stroke-linecap="round"/>`;
+    (sp.waves || []).forEach(v => { s += `<path d="${wave(v[0], v[1], Y + v[2], 3.5)}" fill="none" stroke="var(--verb)" stroke-width="2.4" stroke-linecap="round"/>`; });
+    if (sp.dotted) s += `<line x1="${sp.dotted[0]}" y1="${Y - 9}" x2="${sp.dotted[1] - 8}" y2="${Y - 9}" stroke="var(--aux)" stroke-width="1.6" stroke-dasharray="2 3"/><path d="M${sp.dotted[1] - 9} ${Y - 13} L${sp.dotted[1] - 3} ${Y - 9} L${sp.dotted[1] - 9} ${Y - 5} Z" fill="var(--aux)"/>`;
+    if (sp.arrow) {
+      const [a, b] = sp.arrow, m = (a + b) / 2;
+      s += `<path d="M${a} ${Y - 7} Q${m} ${Y - 22} ${b - 3} ${Y - 7}" fill="none" stroke="var(--aux)" stroke-width="1.8"/>`;
+      s += `<path d="M${b - 9} ${Y - 11} L${b - 2} ${Y - 6} L${b - 10} ${Y - 4} Z" fill="var(--aux)"/>`;
+    }
+    if (sp.brace) {
+      const [a, b, t] = sp.brace;
+      s += `<path d="M${a} ${Y - 9} L${a} ${Y - 15} L${b} ${Y - 15} L${b} ${Y - 9}" fill="none" stroke="var(--aux)" stroke-width="1.4"/>`;
+      s += T((a + b) / 2, Y - 19, t, "var(--aux)");
+    }
+    if (sp.tag) s += T(sp.tag[0], Y - 12, sp.tag[1], "var(--aux)");
+    if (sp.ref) s += `<line x1="${sp.ref}" y1="${Y - 11}" x2="${sp.ref}" y2="${Y + 11}" stroke="var(--aux)" stroke-width="3.2" stroke-linecap="round"/>`;
+    (sp.x || []).forEach(x => { s += xm(x, sp.small ? 4 : 6); });
+    return s + "</svg>";
+  }
+  document.querySelectorAll("[data-icon]").forEach(el => { const sp = SPECS[el.dataset.icon]; if (sp) el.innerHTML = icon(sp); });
+})();
+</script>
