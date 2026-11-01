@@ -37,6 +37,10 @@ Il dataset dimostrativo (ED-A Edificio A, PK-B, VA-C) riproduce i valori dei moc
 
 Scarica `download/meridian-portable.zip`, estrai e apri `meridian/index.html`: funziona senza installazione e senza connessione.
 
+## Decisioni aperte e sviluppi
+
+Vedi [docs/backlog.md](docs/backlog.md): decisioni da prendere e aggiunte possibili per categoria.
+
 ## Note
 
 Primavera e MS Project sono marchi dei rispettivi proprietari; Meridian non è affiliato. Il nome è in attesa della verifica dei marchi.
