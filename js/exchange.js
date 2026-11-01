@@ -293,6 +293,7 @@
     });
     const R = rels.filter((r) => uidMap[r.pu]).map((r) => ({ id: U.uid('r'), pred: uidMap[r.pu], succ: r.succ, type: r.type, lag: r.lag }));
     if (R.length < rels.length) report.push((rels.length - R.length) + ' legami verso attività di riepilogo o esterne non importati.');
+    acts.forEach((a) => { if (a.type === 'finish' && !R.some((r) => r.succ === a.id)) a.type = 'start'; });
     const start = (g(doc.documentElement, 'StartDate') || '').slice(0, 10) || U.isoOf(U.todayDn());
     const status = (g(doc.documentElement, 'StatusDate') || '').slice(0, 10);
     return { project: { code: projName.slice(0, 20), name: projName, plannedStart: start, mustFinish: '', dataDate: status || U.isoOf(U.dnOf(start) - 1), wbs, activities: acts, rels: R }, calendars: [], resources: [], codeTypes: [], report, counts: { attività: acts.length, legami: R.length, wbs: wbs.length } };

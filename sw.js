@@ -1,5 +1,5 @@
 /* Meridian - service worker generato da tools/build.py: cache dell'app per l'uso offline */
-const VERSION = 'meridian-025f16108f';
+const VERSION = 'meridian-dd61793de2';
 const ASSETS = [
   'index.html',
   'css/app.css',

@@ -35,6 +35,7 @@
       try { main = v.render(); } catch (e) { console.error(e); main = '<div class="card"><h2>Errore nella vista</h2><p>' + esc(e.message) + '</p><pre class="mono small">' + esc(e.stack || '') + '</pre></div>'; }
       root.innerHTML = '<div class="app">' + App.top() + App.band() + '<div class="body">' + App.rail(r) + '<main class="main" id="main" tabindex="-1">' + main + '</main></div></div>';
       document.title = (v.title ? v.title + ' - ' : '') + 'Meridian';
+      const topEl = root.querySelector('.top'); if (topEl) document.documentElement.style.setProperty('--toph', topEl.offsetHeight + 'px');
       if (v.after) { try { v.after(); } catch (e) { console.error(e); } }
       if (scr) App.restoreScroll(scr);
     },

@@ -43,13 +43,13 @@ kbd { font: 12px var(--f-m); border: 1px solid #9fb2c5; border-bottom-width: 2px
 .btnchip { border: 0; cursor: pointer; }
 
 /* banda anteprima */
-.band { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 20px; background: var(--band); color: #3d2c00; position: sticky; top: 60px; z-index: 39; border-bottom: 2px solid #c79a00; }
+.band { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 20px; background: var(--band); color: #3d2c00; position: sticky; top: var(--toph, 60px); z-index: 39; border-bottom: 2px solid #c79a00; }
 .band .ii { border-color: #8a6a00; color: #3d2c00; }
 
 /* struttura */
 .app { min-height: 100vh; display: flex; flex-direction: column; }
 .body { display: flex; flex: 1 1 auto; align-items: stretch; }
-.rail { flex: 0 0 212px; background: #fff; border-right: 1px solid var(--line); padding: 10px 10px 20px; display: flex; flex-direction: column; gap: 12px; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; }
+.rail { flex: 0 0 212px; background: #fff; border-right: 1px solid var(--line); padding: 10px 10px 20px; display: flex; flex-direction: column; gap: 12px; position: sticky; top: var(--toph, 60px); height: calc(100vh - var(--toph, 60px)); overflow-y: auto; }
 .nav { display: flex; flex-direction: column; gap: 2px; }
 .nav a { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border-radius: 6px; color: #2a3340; text-decoration: none; font-weight: 600; font-size: 14px; }
 .nav a:hover { background: #f0f4f8; }
