@@ -1,0 +1,1416 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Guida Primavera P6</title><style>.mer-back{position:fixed;right:14px;bottom:14px;z-index:50;background:#0f2a40;color:#fff;font:600 14px sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}h3[id],h4[id]{scroll-margin-top:16px}</style>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+/* Layout: foglio di pianificazione. Indice fisso a sinistra (desktop), colonna di lettura ~70ch, figure a tutta colonna.
+   I colori semantici sono quelli delle barre del Gantt di P6: consuntivo blu, rimanente verde, baseline gialla, critica rossa. */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --ink:#18212c; --muted:#596473; --line:#d6dce4; --line-soft:#e7ebf0;
+  --accent:#1c5a8a; --accent-soft:#e4edf6; --accent-ink:#ffffff;
+  --actual:#2b6fd6; --earned:#d9731a; --remaining:#2f9455; --baseline:#e0ad00; --critical:#cf3a3a; --summary:#2a3340;
+  --note-bg:#eef3f8; --note-line:#9db7d1;
+  --tip-bg:#ecf6ef; --tip-line:#7fbf95;
+  --warn-bg:#fdf3e2; --warn-line:#e2ad55;
+  --sum-bg:#f0f3f7;
+  --code-bg:#eef1f5;
+  --font-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Source Sans 3","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --radius:6px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#11161d; --surface:#18202a; --ink:#e5e9ef; --muted:#9ba6b4; --line:#2d3744; --line-soft:#232c37;
+  --accent:#6aa6dc; --accent-soft:#1c2a3a; --accent-ink:#0f1720;
+  --actual:#5b95ec; --earned:#f0954a; --remaining:#4cb874; --baseline:#e8bf2e; --critical:#ec6262; --summary:#c9d1db;
+  --note-bg:#17222e; --note-line:#3f6487;
+  --tip-bg:#152419; --tip-line:#3d7c52;
+  --warn-bg:#2a2214; --warn-line:#9a7330;
+  --sum-bg:#1a232e; --code-bg:#202a36;
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#11161d; --surface:#18202a; --ink:#e5e9ef; --muted:#9ba6b4; --line:#2d3744; --line-soft:#232c37;
+  --accent:#6aa6dc; --accent-soft:#1c2a3a; --accent-ink:#0f1720;
+  --actual:#5b95ec; --earned:#f0954a; --remaining:#4cb874; --baseline:#e8bf2e; --critical:#ec6262; --summary:#c9d1db;
+  --note-bg:#17222e; --note-line:#3f6487;
+  --tip-bg:#152419; --tip-line:#3d7c52;
+  --warn-bg:#2a2214; --warn-line:#9a7330;
+  --sum-bg:#1a232e; --code-bg:#202a36;
+  color-scheme:dark; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:16px}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:17px; line-height:1.6; padding-inline:16px; padding-block:0}
+a{color:var(--accent)}
+a:focus-visible, button:focus-visible, .t:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+
+.shell{max-width:1240px; margin:0 auto; display:grid; grid-template-columns:260px minmax(0,1fr); gap:48px}
+@media (max-width:980px){ .shell{grid-template-columns:minmax(0,1fr); gap:0} }
+
+/* Indice */
+.toc{position:sticky; top:env(safe-area-inset-top,0px); align-self:start; max-height:100vh; overflow:auto; padding-block:28px 40px; font-size:14px}
+.toc h2{font-family:var(--font-display); font-weight:600; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0 0 10px}
+.toc ol{list-style:none; margin:0; padding:0; display:grid; gap:1px}
+.toc a{display:grid; grid-template-columns:2.2em 1fr; padding:4px 8px; border-radius:4px; text-decoration:none; color:var(--ink); line-height:1.3}
+.toc a span:first-child{font-family:var(--font-mono); font-size:12px; color:var(--muted); padding-top:2px}
+.toc a:hover{background:var(--accent-soft)}
+.toc a.on{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.toc .grp{font-family:var(--font-display); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:14px 8px 4px}
+.toc-toggle{display:none}
+@media (max-width:980px){
+  .toc{position:static; max-height:none; padding-block:12px 0}
+  .toc-toggle{display:flex; width:100%; justify-content:space-between; align-items:center; font:600 15px var(--font-body); color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:10px 14px; cursor:pointer}
+  .toc nav{margin-top:8px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); padding:8px}
+  .toc h2{display:none}
+}
+
+main{min-width:0; padding-block:28px 80px}
+.read{max-width:72ch}
+
+/* Testata */
+.hero{border-bottom:1px solid var(--line); padding-bottom:28px; margin-bottom:12px}
+.eyebrow{font-family:var(--font-display); text-transform:uppercase; letter-spacing:.12em; font-size:14px; color:var(--accent); font-weight:600; margin:0}
+h1{font-family:var(--font-display); font-weight:700; font-size:clamp(40px,6vw,64px); line-height:1; margin:6px 0 12px; letter-spacing:.005em; text-wrap:balance}
+.lede{font-size:19px; color:var(--muted); max-width:62ch; margin:0 0 20px}
+.meta{display:flex; flex-wrap:wrap; gap:8px 20px; font-size:14px; color:var(--muted); margin-bottom:22px}
+.meta b{color:var(--ink); font-weight:600}
+
+/* Titoli */
+.part{font-family:var(--font-display); font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-size:15px; border-top:2px solid var(--ink); padding-top:10px; margin:64px 0 0}
+h2.ch{font-family:var(--font-display); font-weight:700; font-size:clamp(30px,4vw,40px); line-height:1.08; margin:10px 0 14px; text-wrap:balance}
+h2.ch .n{color:var(--accent); margin-right:.35em}
+h3{font-family:var(--font-display); font-weight:600; font-size:24px; line-height:1.15; margin:34px 0 8px; text-wrap:balance}
+h3 .n, h4 .n{font-family:var(--font-mono); font-size:.62em; font-weight:500; color:var(--muted); margin-right:.6em; vertical-align:.18em}
+h4{font-family:var(--font-body); font-weight:700; font-size:17px; margin:22px 0 4px}
+section.chapter{scroll-margin-top:12px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 14px; padding-left:1.3em}
+li{margin:3px 0}
+li::marker{color:var(--muted)}
+strong{font-weight:700}
+
+/* Sintesi del capitolo */
+.sintesi{background:var(--sum-bg); border:1px solid var(--line-soft); border-radius:var(--radius); padding:12px 16px; margin:0 0 20px; font-size:16px}
+.sintesi .lab{font-family:var(--font-display); text-transform:uppercase; letter-spacing:.1em; font-size:13px; color:var(--muted); font-weight:600; display:block; margin-bottom:2px}
+.sintesi p{margin:0}
+
+/* Riquadri */
+.box{border-left:4px solid var(--note-line); background:var(--note-bg); padding:10px 14px; border-radius:0 var(--radius) var(--radius) 0; margin:14px 0 18px; font-size:16px}
+.box .lab{font-family:var(--font-display); text-transform:uppercase; letter-spacing:.09em; font-size:13px; font-weight:700; display:block; margin-bottom:2px; color:var(--muted)}
+.box p:last-child, .box ul:last-child{margin-bottom:0}
+.box.tip{border-color:var(--tip-line); background:var(--tip-bg)}
+.box.warn{border-color:var(--warn-line); background:var(--warn-bg)}
+
+/* Percorsi di menu e tasti */
+.path{font-family:var(--font-mono); font-size:.84em; background:var(--code-bg); border:1px solid var(--line-soft); border-radius:4px; padding:1px 6px; white-space:normal; color:var(--ink)}
+kbd{font-family:var(--font-mono); font-size:.82em; border:1px solid var(--line); border-bottom-width:2px; border-radius:4px; padding:0 5px; background:var(--surface)}
+code{font-family:var(--font-mono); font-size:.86em}
+.id{font-family:var(--font-mono); font-size:.86em; color:var(--accent)}
+
+/* Procedure */
+ol.steps{counter-reset:s; list-style:none; padding:0; display:grid; gap:8px; margin:12px 0 18px}
+ol.steps>li{counter-increment:s; display:grid; grid-template-columns:30px 1fr; gap:10px; margin:0}
+ol.steps>li::before{content:counter(s); font:600 14px var(--font-mono); color:var(--accent-ink); background:var(--accent); width:24px; height:24px; border-radius:50%; display:grid; place-items:center; margin-top:2px}
+ol.steps>li>div{min-width:0}
+
+/* Tabelle */
+.tw{overflow-x:auto; margin:12px 0 20px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:15px; line-height:1.45}
+th,td{text-align:left; vertical-align:top; padding:8px 12px; border-bottom:1px solid var(--line-soft)}
+th{font-family:var(--font-display); font-weight:600; font-size:15px; letter-spacing:.03em; background:var(--sum-bg); color:var(--ink)}
+tr:last-child td{border-bottom:0}
+td.num, th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+td:first-child{font-weight:600}
+table.plain td:first-child{font-weight:400}
+
+/* Formula */
+.formula{font-family:var(--font-mono); font-size:16px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:12px 16px; margin:12px 0 16px; display:flex; flex-wrap:wrap; gap:6px 28px}
+.formula span{white-space:normal; overflow-wrap:anywhere}
+
+/* Figure */
+figure{margin:18px 0 24px}
+.fig{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:14px; overflow-x:auto}
+.fig svg{display:block; width:100%; height:auto; min-width:560px}
+.fig.small svg{min-width:0}
+figcaption{font-size:14px; color:var(--muted); margin-top:6px}
+figcaption b{color:var(--ink)}
+svg text{font-family:var(--font-body)}
+.s-ink{fill:var(--ink)} .s-muted{fill:var(--muted)} .s-acc{fill:var(--accent)}
+.s-line{stroke:var(--line)} .s-strk{stroke:var(--ink)} .s-mstrk{stroke:var(--muted)}
+.s-surface{fill:var(--surface)} .s-soft{fill:var(--sum-bg)} .s-accsoft{fill:var(--accent-soft)}
+.b-act{fill:var(--actual)} .b-rem{fill:var(--remaining)} .b-bl{fill:var(--baseline)} .b-crit{fill:var(--critical)} .b-sum{fill:var(--summary)}
+.k-act{stroke:var(--actual)} .k-ev{stroke:var(--earned)} .b-ev{fill:var(--earned)} .k-rem{stroke:var(--remaining)} .k-bl{stroke:var(--baseline)} .k-crit{stroke:var(--critical)} .k-acc{stroke:var(--accent)}
+
+/* Etichette colore */
+.chip{display:inline-flex; align-items:center; gap:6px; font-size:14px; white-space:nowrap}
+.chip i{display:inline-block; width:18px; height:8px; border-radius:2px}
+.c-act i{background:var(--actual)} .c-rem i{background:var(--remaining)} .c-bl i{background:var(--baseline)} .c-crit i{background:var(--critical)} .c-sum i{background:var(--summary)}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:8px}
+
+/* Termini con definizione */
+.t{border-bottom:1px dotted var(--accent); cursor:help}
+#pop{position:absolute; z-index:20; max-width:320px; background:var(--surface); color:var(--ink); border:1px solid var(--line); box-shadow:0 6px 24px rgba(0,0,0,.18); border-radius:var(--radius); padding:10px 12px; font-size:14px; line-height:1.45}
+#pop b{display:block; font-family:var(--font-display); font-size:16px; letter-spacing:.02em; margin-bottom:2px}
+
+/* Griglie */
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin:12px 0 18px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; min-width:0}
+.card h4{margin-top:0}
+.card p:last-child{margin-bottom:0}
+
+/* Albero EPS */
+.tree{font-family:var(--font-mono); font-size:14px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:12px 16px; margin:12px 0 18px; line-height:1.8; overflow-x:auto}
+.tree .lv1{padding-left:1.6em} .tree .lv2{padding-left:3.2em}
+.tree .tag{font-family:var(--font-body); font-size:13px; color:var(--muted)}
+
+/* Ciclo */
+.cycle{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:14px 0 20px}
+.cycle span{background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-size:15px}
+.cycle em{color:var(--muted); font-style:normal}
+
+/* Checklist */
+ul.check{list-style:none; padding:0}
+ul.check li{padding-left:28px; position:relative}
+ul.check li::before{content:""; position:absolute; left:2px; top:6px; width:14px; height:14px; border:2px solid var(--accent); border-radius:3px}
+
+.foot{border-top:1px solid var(--line); margin-top:64px; padding-top:18px; font-size:14px; color:var(--muted)}
+.foot ul{padding-left:1.1em}
+.toplink{font-size:13px; text-decoration:none; color:var(--muted)}
+</style>
+
+<div class="shell">
+<aside class="toc" id="toc">
+  <button class="toc-toggle" id="tocBtn" aria-expanded="false" aria-controls="tocNav">Indice della guida <span aria-hidden="true">▾</span></button>
+  <nav id="tocNav">
+  <h2>Indice</h2>
+  <div class="grp">Basi</div>
+  <ol>
+    <li><a href="#c1"><span>1</span><span>Cos'è Primavera P6</span></a></li>
+    <li><a href="#c2"><span>2</span><span>Concetti di pianificazione</span></a></li>
+    <li><a href="#c3"><span>3</span><span>L'interfaccia</span></a></li>
+  </ol>
+  <div class="grp">Costruire il programma</div>
+  <ol>
+    <li><a href="#c4"><span>4</span><span>Impostare il progetto</span></a></li>
+    <li><a href="#c5"><span>5</span><span>Attività</span></a></li>
+    <li><a href="#c6"><span>6</span><span>Legami e schedulazione</span></a></li>
+    <li><a href="#c7"><span>7</span><span>Layout, filtri e Gantt</span></a></li>
+    <li><a href="#c8"><span>8</span><span>Risorse e ruoli</span></a></li>
+    <li><a href="#c9"><span>9</span><span>Baseline</span></a></li>
+  </ol>
+  <div class="grp">Controllare</div>
+  <ol>
+    <li><a href="#c10"><span>10</span><span>Aggiornare l'avanzamento</span></a></li>
+    <li><a href="#c11"><span>11</span><span>Report e stampa</span></a></li>
+    <li><a href="#c12"><span>12</span><span>Codici, UDF, Global Change</span></a></li>
+    <li><a href="#c13"><span>13</span><span>Financial periods</span></a></li>
+    <li><a href="#c14"><span>14</span><span>Earned Value</span></a></li>
+    <li><a href="#c15"><span>15</span><span>Rischi, issue e altre funzioni</span></a></li>
+  </ol>
+  <div class="grp">Ambiente</div>
+  <ol>
+    <li><a href="#c16"><span>16</span><span>Utenti e sicurezza</span></a></li>
+    <li><a href="#c17"><span>17</span><span>Scambio dati e 4D</span></a></li>
+    <li><a href="#c18"><span>18</span><span>Buone pratiche</span></a></li>
+    <li><a href="#c19"><span>19</span><span>Glossario</span></a></li>
+  </ol>
+  </nav>
+</aside>
+
+<main>
+<header class="hero">
+  <p class="eyebrow">Guida pratica - dal corso PoliMI CISE</p>
+  <h1>Oracle Primavera P6</h1>
+  <p class="lede">Come costruire, schedulare e controllare un programma lavori in P6 Professional: dai concetti di base all'Earned Value e all'integrazione 4D. Ogni capitolo si apre con una sintesi e segue l'ordine in cui il software si usa davvero.</p>
+  <div class="meta"><span><b>Versione</b> 1.0 - ottobre 2026</span><span><b>Software</b> P6 Professional (PPM), concetti validi anche per EPPM</span><span><b>Base</b> appunti del corso, integrati con la documentazione Oracle</span></div>
+  <figure>
+  <div class="fig">
+  <svg viewBox="0 0 920 330" role="img" aria-label="Il flusso di lavoro in P6 rappresentato come un diagramma di Gantt, con i capitoli della guida come attività">
+    <g font-size="12">
+      <text x="236" y="22" class="s-muted">Impostazione</text>
+      <text x="470" y="22" class="s-muted">Programma</text>
+      <text x="700" y="22" class="s-muted">Controllo</text>
+    </g>
+    <line x1="230" y1="30" x2="900" y2="30" class="s-line" stroke-width="1"/>
+    <g font-size="14">
+      <a href="#c4"><text x="16" y="56" class="s-ink">4  EPS e progetto</text></a>
+      <a href="#c4"><text x="16" y="88" class="s-ink">4  Calendari e WBS</text></a>
+      <a href="#c5"><text x="16" y="120" class="s-ink">5  Attività e durate</text></a>
+      <a href="#c6"><text x="16" y="152" class="s-ink">6  Legami e F9</text></a>
+      <a href="#c8"><text x="16" y="184" class="s-ink">8  Risorse e costi</text></a>
+      <a href="#c9"><text x="16" y="216" class="s-ink">9  Baseline</text></a>
+      <a href="#c10"><text x="16" y="248" class="s-ink">10  Avanzamento</text></a>
+      <a href="#c14"><text x="16" y="280" class="s-ink">14  Earned Value</text></a>
+    </g>
+    <g>
+      <rect x="236" y="44" width="70" height="16" rx="2" class="b-act"/>
+      <rect x="292" y="76" width="80" height="16" rx="2" class="b-act"/>
+      <rect x="360" y="108" width="120" height="16" rx="2" class="b-crit"/>
+      <rect x="470" y="140" width="70" height="16" rx="2" class="b-crit"/>
+      <rect x="520" y="172" width="120" height="16" rx="2" class="b-rem"/>
+      <path d="M660 204 l10 10 l-10 10 l-10 -10 z" class="b-bl"/>
+      <rect x="676" y="236" width="74" height="16" rx="2" class="b-act"/>
+      <rect x="750" y="236" width="140" height="16" rx="2" class="b-rem"/>
+      <rect x="700" y="268" width="190" height="16" rx="2" class="b-rem"/>
+      <rect x="676" y="257" width="214" height="5" class="b-bl"/>
+    </g>
+    <g fill="none" stroke-width="1.4" class="s-mstrk">
+      <path d="M306 52 h8 v24"/><path d="M372 84 h6 v24"/><path d="M480 116 h6 v24"/><path d="M540 148 h6 v24"/><path d="M640 180 h20 v24"/><path d="M670 214 h6 v22"/>
+    </g>
+    <line x1="750" y1="34" x2="750" y2="300" class="k-acc" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="756" y="314" font-size="12" class="s-acc">Data date</text>
+    <g font-size="12" class="s-muted">
+      <rect x="236" y="306" width="16" height="7" class="b-act"/><text x="258" y="314">consuntivo</text>
+      <rect x="336" y="306" width="16" height="7" class="b-rem"/><text x="358" y="314">da fare</text>
+      <rect x="420" y="306" width="16" height="7" class="b-crit"/><text x="442" y="314">critica</text>
+      <rect x="498" y="306" width="16" height="7" class="b-bl"/><text x="520" y="314">baseline</text>
+    </g>
+  </svg>
+  </div>
+  <figcaption><b>Il percorso della guida, disegnato come un Gantt di P6.</b> Ogni barra è un capitolo (cliccabile); i colori sono quelli che P6 usa per consuntivo, rimanente, critico e baseline, gli stessi che ritroverai in tutta la guida.</figcaption>
+  </figure>
+  <div class="box"><span class="lab">Come leggere la guida</span>
+  <p>I percorsi di menu sono scritti così: <span class="path">Enterprise › EPS</span>. I tasti così: <kbd>F9</kbd>. I termini con la sottolineatura a puntini, come <span class="t" tabindex="0" data-t="dd">Data date</span>, mostrano la definizione al passaggio del mouse o al tocco. I riquadri verdi sono buone pratiche, quelli gialli sono errori da evitare.</p></div>
+</header>
+
+<p class="part">Basi</p>
+
+<section class="chapter" id="c1">
+<h2 class="ch"><span class="n">1</span>Cos'è Primavera P6</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>P6 è il software Oracle per pianificare e controllare progetti. Lavora su un database condiviso: i progetti non sono file separati ma voci di un unico archivio, che si possono analizzare insieme come portafoglio. Per il corso si usa P6 Professional con un database locale SQLite.</p></div>
+
+<h3 id="s1-1"><span class="n">1.1</span>A cosa serve e in cosa è diverso</h3>
+<p>P6 serve a costruire un programma lavori (attività, durate, legami), a calcolarne le date con il metodo del percorso critico, a caricare risorse e costi, a fissare una baseline e poi a misurare l'avanzamento rispetto a quella. È lo standard di riferimento nei grandi progetti di costruzione, energia e infrastrutture: molti committenti chiedono il programma in formato P6.</p>
+<div class="tw"><table>
+<thead><tr><th>Aspetto</th><th>Primavera P6</th><th>MS Project</th></tr></thead>
+<tbody>
+<tr><td>Archivio</td><td>Database multiutente, molti progetti insieme</td><td>Un file per progetto (versione server a parte)</td></tr>
+<tr><td>Vista multiprogetto</td><td>Nativa: si aprono più progetti e si analizzano come portafoglio</td><td>Limitata</td></tr>
+<tr><td>WBS</td><td>Entità propria, con proprietà; non si pianifica direttamente</td><td>Attività di sommario, pianificabile</td></tr>
+<tr><td>Ricalcolo</td><td>Manuale con <kbd>F9</kbd> (attivabile in automatico)</td><td>Automatico</td></tr>
+<tr><td>Uso tipico</td><td>Programmi complessi, contrattuali, multi-progetto</td><td>Gantt rapidi ad alto livello, più semplice da usare</td></tr>
+</tbody></table></div>
+
+<h3 id="s1-2"><span class="n">1.2</span>Edizioni</h3>
+<div class="tw"><table>
+<thead><tr><th>Edizione</th><th>Cosa comprende</th><th>Quando si usa</th></tr></thead>
+<tbody>
+<tr><td>P6 Professional (PPM)</td><td>Client installato sul PC, collegato a un database locale o di rete</td><td>Il caso di questo corso: un planner o un piccolo gruppo</td></tr>
+<tr><td>P6 EPPM</td><td>Client Professional più interfaccia web, sicurezza avanzata, dashboard e report web</td><td>Aziende con molti utenti e progetti, anche come servizio cloud Oracle</td></tr>
+<tr><td>Oracle Primavera Cloud</td><td>Prodotto distinto, solo web, con dati e licenze propri</td><td>Nuove installazioni completamente cloud</td></tr>
+</tbody></table></div>
+<p>La storia in breve: Primavera Systems nasce nel 1983 negli Stati Uniti; il prodotto storico era P3, a cui è seguito P6. Oracle ha acquisito la società con effetto dal 1° gennaio 2009. Oggi le versioni sono numerate per anno e mese (ad esempio 25.12, uscita a fine 2025).</p>
+
+<h3 id="s1-3"><span class="n">1.3</span>Architettura e database</h3>
+<figure><div class="fig">
+<svg viewBox="0 0 860 210" role="img" aria-label="Schema: più client P6 Professional collegati a un database condiviso; in alternativa un client standalone con database SQLite locale">
+  <g font-size="14">
+    <rect x="20" y="20" width="200" height="54" rx="6" class="s-surface s-strk" stroke-width="1.2"/>
+    <text x="120" y="44" text-anchor="middle" class="s-ink" font-weight="600">P6 Professional</text><text x="120" y="62" text-anchor="middle" class="s-muted" font-size="12">PC del planner A</text>
+    <rect x="20" y="96" width="200" height="54" rx="6" class="s-surface s-strk" stroke-width="1.2"/>
+    <text x="120" y="120" text-anchor="middle" class="s-ink" font-weight="600">P6 Professional</text><text x="120" y="138" text-anchor="middle" class="s-muted" font-size="12">PC del planner B</text>
+    <rect x="300" y="58" width="220" height="70" rx="6" class="s-accsoft k-acc" stroke-width="1.6"/>
+    <text x="410" y="86" text-anchor="middle" class="s-ink" font-weight="600">Database condiviso</text><text x="410" y="106" text-anchor="middle" class="s-muted" font-size="12">Oracle o SQL Server</text>
+    <rect x="600" y="58" width="240" height="70" rx="6" class="s-soft s-line" stroke-width="1.2" stroke-dasharray="5 4"/>
+    <text x="720" y="86" text-anchor="middle" class="s-ink" font-weight="600">Standalone</text><text x="720" y="106" text-anchor="middle" class="s-muted" font-size="12">client + file SQLite sul PC</text>
+  </g>
+  <g fill="none" class="s-mstrk" stroke-width="1.5"><path d="M220 47 L300 80"/><path d="M220 123 L300 106"/></g>
+  <text x="410" y="170" text-anchor="middle" font-size="13" class="s-muted">progetti, EPS, risorse, calendari e codici vivono nel database, non in file</text>
+  <text x="720" y="150" text-anchor="middle" font-size="12" class="s-muted">usato nel corso: 1 utente</text>
+</svg></div>
+<figcaption><b>Client e database.</b> Il client è l'interfaccia; tutto ciò che si crea viene scritto subito nel database, quindi in P6 non esiste il comando Salva.</figcaption></figure>
+<ul>
+<li><strong>SQLite</strong>: un file locale creato al primo avvio, adatto allo studio e al lavoro di un solo utente. Non gestisce la sicurezza multiutente né i collegamenti diretti con software esterni.</li>
+<li><strong>Oracle Database Express (XE)</strong>: gratuito ma limitato (la versione 21c arriva a 12 GB di dati, 2 GB di RAM e 2 core). Permette di provare utenti, profili di sicurezza e integrazioni.</li>
+<li><strong>Oracle o SQL Server completi</strong>: per l'uso aziendale.</li>
+</ul>
+
+<h3 id="s1-4"><span class="n">1.4</span>Installazione di P6 Professional</h3>
+<ol class="steps">
+<li><div>Creare un account Oracle e aprire <strong>Oracle Software Delivery Cloud</strong> (eDelivery).</div></li>
+<li><div>Cercare <em>Primavera P6 Professional Project Portfolio Management</em> e scaricare il pacchetto del client. Il pacchetto con le API serve solo per collegare software esterni (es. Synchro) a un database Oracle.</div></li>
+<li><div>Installare con l'opzione <strong>Typical</strong>.</div></li>
+<li><div>Al primo avvio lanciare la configurazione del database: driver <strong>P6 Pro Standalone (SQLite)</strong>, nuovo database, utente amministratore e password.</div></li>
+<li><div>Scegliere la <strong>valuta di base</strong> (per noi EUR). P6 gestisce più valute con i tassi di cambio, ma la base va decisa subito.</div></li>
+<li><div>Avviare P6 Professional. Se si hanno più database (es. uno per cliente), si sceglie quale aprire dal pulsante Advanced della finestra di login.</div></li>
+</ol>
+<div class="box warn"><span class="lab">Attenzione</span><p>Il software scaricato da eDelivery funziona anche oltre il periodo di prova, ma l'uso professionale richiede una licenza Oracle.</p></div>
+</div>
+</section>
+
+<section class="chapter" id="c2">
+<h2 class="ch"><span class="n">2</span>Concetti di pianificazione</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Un programma si costruisce rispondendo a domande in sequenza: cosa fare (WBS), chi lo fa (OBS), con quali attività e in che ordine (reticolo), poi si fissa la baseline. P6 traduce questi concetti in strutture proprie, a partire dall'EPS che ordina i progetti nel database.</p></div>
+
+<h3 id="s2-1"><span class="n">2.1</span>I passi della pianificazione tecnica</h3>
+<ol class="steps">
+<li><div><strong>WBS - cosa bisogna fare.</strong> Scomposizione gerarchica del lavoro in livelli, per area, disciplina o altra logica. Si progetta fuori da P6 e poi si inserisce o importa.</div></li>
+<li><div><strong>OBS - chi è responsabile.</strong> La struttura dell'organizzazione: direzione, reparti, fornitori, subappaltatori.</div></li>
+<li><div><strong>Assegnazione delle responsabilità.</strong> Incrociando WBS e OBS nascono i <span class="t" tabindex="0" data-t="ca">control account</span>, dove si gestiscono insieme scope, costi e tempi.</div></li>
+<li><div><strong>Attività.</strong> Il livello sotto l'ultimo nodo di WBS: sbancamento, getto, montaggio. All'inizio è una lista, senza ordine.</div></li>
+<li><div><strong>Reticolo.</strong> I legami tra attività danno la sequenza logica e la data di fine. Da qui il Gantt e la baseline di tempi, risorse e costi.</div></li>
+</ol>
+<div class="tw"><table class="plain">
+<thead><tr><th>OBS \ WBS</th><th>Fondazioni</th><th>Strutture</th><th>Impianti</th></tr></thead>
+<tbody>
+<tr><td>Impresa - direzione tecnica</td><td><strong>CA 1</strong></td><td><strong>CA 2</strong></td><td></td></tr>
+<tr><td>Subappaltatore strutture</td><td></td><td><strong>CA 3</strong></td><td></td></tr>
+<tr><td>Fornitore impianti</td><td></td><td></td><td><strong>CA 4</strong></td></tr>
+</tbody></table></div>
+<p>Esempio di matrice WBS x OBS: ogni cella piena è un control account, con un responsabile e un perimetro di lavoro chiari.</p>
+<div class="box"><span class="lab">Lessico</span><p>Nel PMBOK il livello più basso della WBS è il <strong>work package</strong>; le attività ne sono la scomposizione. In P6 i nodi si chiamano WBS e le attività <em>Activities</em>.</p></div>
+
+<h3 id="s2-2"><span class="n">2.2</span>Le strutture di P6</h3>
+<figure><div class="fig">
+<svg viewBox="0 0 860 280" role="img" aria-label="Gerarchia delle strutture P6: EPS contiene progetti, che contengono WBS, che contengono attività; a lato OBS, risorse, ruoli, codici e calendari">
+  <g font-size="14">
+    <rect x="300" y="14" width="260" height="40" rx="5" class="s-accsoft k-acc" stroke-width="1.5"/><text x="430" y="39" text-anchor="middle" class="s-ink" font-weight="600">EPS (nodi)</text>
+    <rect x="300" y="78" width="260" height="40" rx="5" class="s-surface s-strk"/><text x="430" y="103" text-anchor="middle" class="s-ink" font-weight="600">Progetto</text>
+    <rect x="300" y="142" width="260" height="40" rx="5" class="s-surface s-strk"/><text x="430" y="167" text-anchor="middle" class="s-ink" font-weight="600">WBS</text>
+    <rect x="300" y="206" width="260" height="40" rx="5" class="s-surface s-strk"/><text x="430" y="231" text-anchor="middle" class="s-ink" font-weight="600">Attività</text>
+    <rect x="30" y="14" width="180" height="40" rx="5" class="s-soft s-line"/><text x="120" y="39" text-anchor="middle" class="s-ink">OBS</text>
+    <rect x="30" y="206" width="180" height="40" rx="5" class="s-soft s-line"/><text x="120" y="231" text-anchor="middle" class="s-ink">Risorse e ruoli</text>
+    <rect x="650" y="142" width="180" height="40" rx="5" class="s-soft s-line"/><text x="740" y="167" text-anchor="middle" class="s-ink">Codici e UDF</text>
+    <rect x="650" y="206" width="180" height="40" rx="5" class="s-soft s-line"/><text x="740" y="231" text-anchor="middle" class="s-ink">Calendari, cost account</text>
+  </g>
+  <g fill="none" class="s-mstrk" stroke-width="1.5">
+    <path d="M430 54 v24"/><path d="M430 118 v24"/><path d="M430 182 v24"/>
+    <path d="M210 34 h90" stroke-dasharray="4 3"/><path d="M210 226 h90"/><path d="M650 162 h-90"/><path d="M650 226 h-90"/>
+  </g>
+  <g font-size="12" class="s-muted">
+    <text x="218" y="28">responsabile</text><text x="226" y="220">assegnate</text><text x="570" y="156">attributi</text><text x="572" y="220">regole</text>
+  </g>
+</svg></div>
+<figcaption><b>Come si collegano le strutture.</b> La colonna centrale è la gerarchia del programma; a lato le anagrafiche condivise che si agganciano a progetti e attività.</figcaption></figure>
+<div class="tw"><table>
+<thead><tr><th>Struttura</th><th>A cosa serve</th><th>Livello</th></tr></thead>
+<tbody>
+<tr><td>EPS</td><td>Albero che ordina i progetti nel database (per area, cliente, stato); regola anche l'accesso degli utenti</td><td>Enterprise</td></tr>
+<tr><td>OBS</td><td>Gerarchia dei responsabili; facoltativa nel lavoro singolo, necessaria con più utenti</td><td>Enterprise</td></tr>
+<tr><td>Risorse (RBS)</td><td>Anagrafica di persone, mezzi e materiali con tariffe e disponibilità</td><td>Enterprise</td></tr>
+<tr><td>Ruoli</td><td>Profili professionali (es. elettricista) da usare prima di sapere quali persone avremo</td><td>Enterprise</td></tr>
+<tr><td>WBS</td><td>Scomposizione del lavoro del singolo progetto</td><td>Progetto</td></tr>
+<tr><td>Codici</td><td>Attributi con valori ammessi (fase, disciplina, fornitore) per raggruppare e filtrare</td><td>Globali, per EPS o per progetto</td></tr>
+<tr><td>UDF</td><td>Campi liberi definiti dall'utente: testo, data, numero, costo, indicatore a semaforo</td><td>Enterprise</td></tr>
+<tr><td>Calendari</td><td>Giorni e ore lavorative: globali, di progetto, di risorsa</td><td>Entrambi</td></tr>
+<tr><td>Curve di distribuzione</td><td>Profili percentuali per distribuire ore e costi nel tempo</td><td>Enterprise</td></tr>
+<tr><td>Cost account</td><td>Voci di costo per riconciliare P6 con il budget aziendale</td><td>Enterprise</td></tr>
+</tbody></table></div>
+
+<h3 id="s2-3"><span class="n">2.3</span>Ordine di impostazione in P6</h3>
+<p>In P6 l'ordine è diverso da quello teorico: prima si preparano le strutture comuni a tutto il database, poi il singolo progetto.</p>
+<ol class="steps">
+<li><div><strong>EPS</strong>: dove andrà il progetto.</div></li>
+<li><div><strong>OBS</strong>: chi ne è responsabile.</div></li>
+<li><div><strong>Calendari, risorse e ruoli</strong>: le anagrafiche condivise.</div></li>
+<li><div><strong>Progetto e WBS</strong>: le aree di lavoro.</div></li>
+<li><div><strong>Attività, legami, assegnazioni</strong>: il programma vero e proprio.</div></li>
+</ol>
+</div>
+</section>
+
+<section class="chapter" id="c3">
+<h2 class="ch"><span class="n">3</span>L'interfaccia</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>La finestra ha una parte alta (tabella e Gantt) e una parte bassa con i dettagli dell'elemento selezionato. I menu Enterprise e Project separano i dati comuni a tutto il database da quelli del progetto aperto. Le preferenze Admin valgono per tutti, quelle User solo per noi.</p></div>
+
+<h3 id="s3-1"><span class="n">3.1</span>La finestra di lavoro</h3>
+<figure><div class="fig">
+<svg viewBox="0 0 860 330" role="img" aria-label="Schema della finestra di P6: menu, barra orizzontale, barra verticale sinistra e destra, parte alta con tabella e Gantt, parte bassa con dettagli">
+  <rect x="150" y="10" width="560" height="300" rx="4" class="s-surface s-strk" stroke-width="1.2"/>
+  <rect x="150" y="10" width="560" height="24" class="s-soft"/><text x="162" y="27" font-size="13" class="s-ink">File  Edit  View  Project  Enterprise  Tools  Admin  Help</text>
+  <rect x="150" y="34" width="560" height="22" class="s-accsoft"/><text x="190" y="50" font-size="12" class="s-ink">barra orizzontale: layout, colonne, filtri, viste, stampa</text>
+  <rect x="150" y="56" width="34" height="254" class="s-soft"/><rect x="676" y="56" width="34" height="254" class="s-soft"/>
+  <rect x="184" y="56" width="236" height="140" class="s-surface s-line"/><text x="198" y="78" font-size="12" class="s-muted">ID  Nome attività   Durata</text>
+  <g class="s-line" stroke-width="1"><line x1="190" y1="92" x2="414" y2="92"/><line x1="190" y1="112" x2="414" y2="112"/><line x1="190" y1="132" x2="414" y2="132"/><line x1="190" y1="152" x2="414" y2="152"/></g>
+  <rect x="420" y="56" width="256" height="140" class="s-surface s-line"/>
+  <rect x="440" y="96" width="70" height="10" class="b-act"/><rect x="500" y="116" width="90" height="10" class="b-crit"/><rect x="560" y="136" width="80" height="10" class="b-rem"/>
+  <rect x="184" y="196" width="492" height="114" class="s-soft s-line"/><text x="196" y="218" font-size="12" class="s-muted">General | Status | Resources | Relationships | Codes | Notes ...</text>
+  <g font-size="13" class="s-ink">
+    <text x="300" y="268" text-anchor="middle">BOTTOM: dettagli dell'elemento selezionato</text>
+    <text x="300" y="186" text-anchor="middle">TOP: tabella</text><text x="548" y="186" text-anchor="middle">Gantt</text>
+  </g>
+  <g font-size="13" class="s-ink">
+    <text x="10" y="90">Barra verticale</text><text x="10" y="108">sinistra:</text><text x="10" y="126" class="s-muted">sezioni del</text><text x="10" y="144" class="s-muted">progetto</text>
+    <text x="722" y="90">Barra verticale</text><text x="722" y="108">destra:</text><text x="722" y="126" class="s-muted">aggiungi, elimina,</text><text x="722" y="144" class="s-muted">copia, sposta</text>
+  </g>
+  <g fill="none" class="s-mstrk" stroke-width="1"><path d="M110 150 L150 170"/><path d="M748 150 L710 170"/></g>
+</svg></div>
+<figcaption><b>Le zone della finestra.</b> Tasto destro su qualsiasi zona apre il menu contestuale con le stesse funzioni dei menu in alto, spesso più rapido.</figcaption></figure>
+<p>Un pulsante utile da aggiungere alla barra orizzontale è <strong>No bottom layout</strong> (<span class="path">▾ a fine barra › Add buttons</span>): nasconde la parte bassa e lascia più spazio a tabella e Gantt, anche in stampa. Il pulsante <strong>Details</strong> la riporta.</p>
+
+<h3 id="s3-2"><span class="n">3.2</span>I menu principali</h3>
+<div class="tw"><table>
+<thead><tr><th>Menu</th><th>Contenuto principale</th></tr></thead>
+<tbody>
+<tr><td>File</td><td>Apri e chiudi progetti, import/export (XER, XML, Excel), anteprima di stampa: la via consigliata per i report</td></tr>
+<tr><td>Edit</td><td>User Preferences, operazioni sulle righe, Undo</td></tr>
+<tr><td>View</td><td>Layout, colonne, filtri, raggruppamenti, viste tabella, Gantt e reticolo</td></tr>
+<tr><td>Project</td><td>Dati del progetto aperto: WBS, attività, assegnazioni, baseline, spese, rischi, issue. Se è grigio, nessun progetto è aperto</td></tr>
+<tr><td>Enterprise</td><td>Dati comuni al database: progetti, EPS, OBS, risorse, ruoli, calendari, codici, UDF, curve</td></tr>
+<tr><td>Tools</td><td>Schedule (<kbd>F9</kbd>), Level resources, Global Change, Store period performance, Monitor thresholds, Summarize</td></tr>
+<tr><td>Admin</td><td>Admin Preferences, categorie, valute, Financial period calendars; con un database Oracle anche utenti e profili di sicurezza</td></tr>
+<tr><td>Help</td><td>Guida in linea, informazioni su versione e database</td></tr>
+</tbody></table></div>
+
+<h3 id="s3-3"><span class="n">3.3</span>Preferenze: Admin e User</h3>
+<div class="two">
+<div class="card"><h4 id="s3-3-1">Admin Preferences</h4><p>Valgono per tutto il database e tutti gli utenti. Esempi: primo giorno della settimana, numero massimo di livelli WBS, separatore del codice WBS, nomi dei prezzi delle risorse, impostazioni dell'Earned Value. Categorie in <span class="path">Admin › Admin Categories</span> (es. unità di misura, che sono solo etichette e non convertono).</p></div>
+<div class="card"><h4 id="s3-3-2">User Preferences</h4><p>Personali, in <span class="path">Edit › User Preferences</span>. Unità di tempo (ore o giorni), decimali, formato date, valuta di visualizzazione, wizard di creazione attività e risorse, colonne dei Financial periods.</p></div>
+</div>
+<div class="tw"><table>
+<thead><tr><th>Impostazione</th><th>Valore consigliato</th><th>Perché</th></tr></thead>
+<tbody>
+<tr><td>Time Units › Duration</td><td>Giorni, 0 decimali</td><td>Durate leggibili; con decimali compaiono frazioni di giorno</td></tr>
+<tr><td>Dates › Time</td><td>Non mostrare l'ora</td><td>Serve solo con turni orari da gestire</td></tr>
+<tr><td>Currency</td><td>EUR</td><td>Una valuta unica rende confrontabili costi e report</td></tr>
+<tr><td>Separatore decimale e negativi</td><td>Come le impostazioni internazionali di Windows</td><td>Evita numeri letti come testo quando si esporta in Excel</td></tr>
+</tbody></table></div>
+
+<h3 id="s3-4"><span class="n">3.4</span>Aprire uno o più progetti</h3>
+<p>In <span class="path">Enterprise › Projects</span> i progetti sono le cartelle dentro l'albero dell'EPS. Tasto destro <span class="path">› Open Project</span> apre il progetto e la sezione Activities. Aprendo un progetto si chiude il precedente.</p>
+<p>Per aprirne più di uno: selezione multipla con <kbd>Ctrl</kbd> + clic, poi <span class="path">Open Project</span>; oppure tasto destro su un nodo EPS per aprire tutti i progetti che contiene. La barra del titolo mostra cosa è aperto. In Activities, tasto destro <span class="path">› Collapse All</span> dà una vista di portafoglio: è uno dei punti di forza di P6.</p>
+</div>
+</section>
+
+<p class="part">Costruire il programma</p>
+
+<section class="chapter" id="c4">
+<h2 class="ch"><span class="n">4</span>Impostare il progetto</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Si crea un nodo EPS per il lavoro, con tre sottonodi per stato (Baseline, Current, Backup), poi il progetto con il wizard. Si definiscono i calendari, festività comprese, e infine la WBS, che in P6 non si pianifica direttamente.</p></div>
+
+<h3 id="s4-1"><span class="n">4.1</span>EPS e organizzazione per stato</h3>
+<ol class="steps">
+<li><div><span class="path">Enterprise › EPS</span>, selezionare la radice e <strong>Add</strong>: EPS ID, nome, Responsible Manager (un elemento dell'OBS).</div></li>
+<li><div>Creare i sottonodi e portarli sotto il nodo padre con le frecce della barra destra (freccia a destra = diventa figlio).</div></li>
+</ol>
+<div class="tree" aria-label="Struttura EPS del corso">
+<div>▲ CORSO_P6 <span class="tag">nodo del lavoro</span></div>
+<div class="lv1">▲ BASE <span class="tag">baseline approvate: delicate, spesso contrattuali, si toccano solo con un change</span></div>
+<div class="lv1">▲ CURR <span class="tag">programma vivo, aggiornato a ogni avanzamento</span></div>
+<div class="lv1">▲ BKG <span class="tag">copie, simulazioni e versioni vecchie</span></div>
+</div>
+<div class="box tip"><span class="lab">Buona pratica</span><p>Ogni prova o simulazione si fa su una copia del progetto nel nodo BKG, mai sul programma corrente. Il nome della copia dice cosa contiene, ad esempio <code>CURR_2026-10-31_scenario+10%</code>.</p></div>
+
+<h3 id="s4-2"><span class="n">4.2</span>Creare il progetto</h3>
+<p>Da <span class="path">Enterprise › Projects</span> con <strong>Add</strong>, il pulsante + della barra destra o il tasto <kbd>Ins</kbd>. Il wizard chiede:</p>
+<div class="tw"><table>
+<thead><tr><th>Campo</th><th>Significato</th></tr></thead>
+<tbody>
+<tr><td>Nodo EPS</td><td>Dove salvarlo; si può spostare dopo con taglia e incolla</td></tr>
+<tr><td>Project ID e nome</td><td>L'ID è il codice univoco nel database</td></tr>
+<tr><td>Planned start</td><td>Data di inizio; può essere anche nel passato</td></tr>
+<tr><td>Must finish by</td><td>Facoltativa. Data da cui parte il calcolo all'indietro delle date Late: se la rete non ci sta, il <span class="t" tabindex="0" data-t="tf">Total float</span> diventa negativo. Non impedisce alle attività di finire dopo</td></tr>
+<tr><td>Rate type</td><td>Quale dei cinque prezzi unitari delle risorse usare per i costi</td></tr>
+</tbody></table></div>
+<p>Dopo la creazione controllare la scheda <strong>Defaults</strong> del progetto (parte bassa, sezione Projects): tipo di durata, tipo di percentuale, tipo di attività e calendario che verranno dati a ogni nuova attività.</p>
+
+<h3 id="s4-3"><span class="n">4.3</span>Calendari</h3>
+<p>In <span class="path">Enterprise › Calendars</span> si scelgono calendari <strong>Global</strong> (usabili da tutti i progetti), <strong>Project</strong> o <strong>Resource</strong>. Si crea un calendario partendo da uno esistente e con <strong>Modify</strong> si definisce:</p>
+<ul>
+<li><strong>Workweek</strong>: ore lavorative per ogni giorno della settimana, ad esempio 8 ore dal lunedì al venerdì e 0 sabato e domenica.</li>
+<li><strong>Total work hours/day</strong> (semplice) oppure <strong>Detailed</strong> (fasce orarie, pausa pranzo compresa): il dettaglio serve solo se si lavora a turni.</li>
+<li><strong>Nonwork</strong>: si selezionano i singoli giorni festivi e si marcano come non lavorativi.</li>
+<li><strong>Time periods</strong>: ore per giorno, settimana, mese e anno. Sono solo fattori di conversione per mostrare le durate in unità diverse; vanno resi coerenti tra loro (8 h/giorno, 40 h/settimana, 2.080 h/anno con 52 settimane).</li>
+</ul>
+<div class="tw"><table class="plain">
+<thead><tr><th>L</th><th>M</th><th>M</th><th>G</th><th>V</th><th>S</th><th>D</th></tr></thead>
+<tbody><tr><td>8</td><td>8</td><td>8</td><td>8</td><td>8</td><td>0</td><td>0</td></tr></tbody></table></div>
+<div class="box tip"><span class="lab">Buona pratica</span><p>Inserire una volta sola nel calendario Global le festività italiane (1/1, 6/1, Pasquetta, 25/4, 1/5, 2/6, 15/8, 1/11, 8/12, 25 e 26/12, patrono) e la chiusura estiva del cantiere, così tutti i progetti le ereditano.</p></div>
+
+<h3 id="s4-4"><span class="n">4.4</span>WBS</h3>
+<p>Dalla barra verticale sinistra, sezione <strong>WBS</strong>: con + si aggiungono i nodi e con le frecce si spostano di livello o di posizione. Il codice completo di un nodo è la catena dei codici dei padri (es. <code>CORSO.FOND.SCAVI</code>).</p>
+<div class="box"><span class="lab">Da sapere</span><p>A differenza di MS Project e Synchro, in P6 un nodo WBS non ha durata propria: prende date e durata dalle attività che contiene. Per avere una barra di sommario pianificabile si usa un'attività di tipo <strong>WBS Summary</strong> (5.2).</p></div>
+</div>
+</section>
+
+<section class="chapter" id="c5">
+<h2 class="ch"><span class="n">5</span>Attività</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Ogni attività ha un tipo, una durata, un tipo di durata e un tipo di percentuale di completamento. Prima di inserirle conviene controllare i default del progetto. Durata, unità di lavoro e unità per tempo sono legate da una formula: il tipo di durata decide quale delle tre resta ferma. Le liste si possono preparare in Excel e reimportare.</p></div>
+
+<h3 id="s5-1"><span class="n">5.1</span>Creare le attività</h3>
+<ol class="steps">
+<li><div>Aprire il progetto: si apre la sezione <strong>Activities</strong>. Scegliere un layout di partenza, ad esempio <span class="path">Layout › Classic Schedule Layout</span>.</div></li>
+<li><div>Aggiungere con + o <kbd>Ins</kbd>. Il wizard, se attivo, chiede ID, nome, WBS, durata (Original Duration) e risorse.</div></li>
+<li><div>Mostrare le colonne utili (tasto destro sull'intestazione <span class="path">› Columns</span>): Activity ID, Activity Name, Original Duration, Calendar, Duration Type, Percent Complete Type.</div></li>
+<li><div>Per cambiare un valore su molte righe: selezionarle e usare tasto destro <span class="path">› Fill Down</span>, che copia il valore della prima riga nelle altre.</div></li>
+</ol>
+
+<h3 id="s5-2"><span class="n">5.2</span>Tipi di attività</h3>
+<div class="tw"><table>
+<thead><tr><th>Tipo</th><th>Comportamento</th><th>Uso tipico</th></tr></thead>
+<tbody>
+<tr><td>Task Dependent</td><td>Le date seguono il calendario dell'attività</td><td>La grande maggioranza delle lavorazioni</td></tr>
+<tr><td>Resource Dependent</td><td>Ogni risorsa lavora secondo il proprio calendario</td><td>Squadre o mezzi con orari diversi dal cantiere</td></tr>
+<tr><td>Start / Finish Milestone</td><td>Durata zero, solo una data; nessuna risorsa</td><td>Eventi e scadenze: inizio fondazioni, consegna</td></tr>
+<tr><td>Level of Effort (LOE)</td><td>Durata calcolata dai legami con altre attività (SS dai predecessori, FF dai successori); non è mai critica</td><td>Attività di supporto: direzione lavori, PM, noli a tempo</td></tr>
+<tr><td>WBS Summary</td><td>Va dal primo inizio all'ultima fine delle attività del suo nodo WBS</td><td>Barra di sommario di un'area, con risorse e costi propri</td></tr>
+</tbody></table></div>
+<figure><div class="fig">
+<svg viewBox="0 0 860 190" role="img" aria-label="Esempio di attività LOE e WBS Summary sopra alcune attività">
+  <g font-size="13" class="s-ink"><text x="12" y="34">WBS Summary</text><text x="12" y="70">Attività</text><text x="12" y="94">Attività</text><text x="12" y="118">Attività</text><text x="12" y="160">LOE (PM)</text></g>
+  <rect x="160" y="22" width="560" height="16" rx="2" class="b-sum"/>
+  <rect x="160" y="60" width="180" height="14" rx="2" class="b-rem"/>
+  <rect x="300" y="84" width="200" height="14" rx="2" class="b-rem"/>
+  <rect x="470" y="108" width="250" height="14" rx="2" class="b-rem"/>
+  <rect x="160" y="150" width="560" height="14" rx="2" class="s-accsoft k-acc" stroke-width="1.5"/>
+  <g fill="none" class="s-mstrk" stroke-width="1.3" stroke-dasharray="4 3"><path d="M160 74 V150"/><path d="M720 122 V150"/></g>
+  <text x="166" y="140" font-size="12" class="s-muted">SS</text><text x="700" y="140" font-size="12" class="s-muted">FF</text>
+</svg></div>
+<figcaption><b>WBS Summary e LOE.</b> La WBS Summary copre le attività del proprio nodo senza legami; la LOE si allunga tra i legami SS e FF che le si danno.</figcaption></figure>
+
+<h3 id="s5-3"><span class="n">5.3</span>Durata, unità e tipo di durata</h3>
+<p>Quando a un'attività sono assegnate risorse, tre grandezze sono legate tra loro:</p>
+<div class="formula"><span>Durata = Unità / (Unità per tempo)</span><span>Unità = Unità per tempo x Durata</span></div>
+<p>Esempio: una risorsa a 8 h/giorno per 5 giorni lavora 40 ore. Se si cambia una delle tre grandezze, P6 deve ricalcolarne un'altra: il <strong>Duration Type</strong> stabilisce quali restano fisse.</p>
+<div class="tw"><table>
+<thead><tr><th>Duration type</th><th>Resta fisso</th><th>Viene ricalcolato</th><th>Quando usarlo</th></tr></thead>
+<tbody>
+<tr><td>Fixed Duration and Units/Time</td><td>Durata e ritmo della risorsa</td><td>Le unità (ore totali)</td><td>Programmazione per durate decise dal planner: il caso più comune</td></tr>
+<tr><td>Fixed Duration and Units</td><td>Durata e ore totali (quindi il costo)</td><td>Il ritmo (h/giorno)</td><td>Budget di ore bloccato; attenzione a sovra o sottoallocazioni</td></tr>
+<tr><td>Fixed Units/Time</td><td>Il ritmo della risorsa (es. 8 h/giorno)</td><td>Durata o ore totali</td><td>Attività guidate dalle risorse: più squadre, meno giorni</td></tr>
+<tr><td>Fixed Units</td><td>Le ore totali e il budget</td><td>La durata, se cambia il ritmo</td><td>Quantità di lavoro nota e fissa</td></tr>
+</tbody></table></div>
+<p>Il corso usava due immagini efficaci: Fixed Units è lo "schiavista" (stesso costo, si lavora di più), Fixed Units/Time il "sindacalista" (8 ore al giorno, il resto si adegua).</p>
+
+<h3 id="s5-4"><span class="n">5.4</span>Percent complete type</h3>
+<div class="tw"><table>
+<thead><tr><th>Tipo</th><th>Come si calcola</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>Physical</td><td>Inserito a mano dal planner, oppure calcolato dagli Activity steps</td><td>Il più sicuro: misura il lavoro fatto, non il tempo passato</td></tr>
+<tr><td>Duration</td><td>(Durata originale - Durata rimanente) / Durata originale</td><td>Non è il tempo trascorso: se la rimanente si allunga, la percentuale scende</td></tr>
+<tr><td>Units</td><td>Unità effettive / Unità a finire</td><td>Richiede ore consuntivate affidabili</td></tr>
+</tbody></table></div>
+
+<h3 id="s5-5"><span class="n">5.5</span>Vincoli</h3>
+<p>Un vincolo forza una data indipendentemente dai legami. Si imposta nella scheda Status dell'attività. Va usato poco: ogni vincolo toglie flessibilità al calcolo e può nascondere problemi della logica.</p>
+<div class="tw"><table>
+<thead><tr><th>Vincolo</th><th>Effetto</th></tr></thead>
+<tbody>
+<tr><td>Start On or After / Finish On or After</td><td>Non prima di una data (agisce sulle date Early). Il più usato, ad esempio per una consegna materiali</td></tr>
+<tr><td>Start On or Before / Finish On or Before</td><td>Non dopo una data (agisce sulle date Late, riduce il float)</td></tr>
+<tr><td>Start On / Finish On</td><td>Esattamente in una data</td></tr>
+<tr><td>Mandatory Start / Mandatory Finish</td><td>Forza la data anche contro la logica: da evitare</td></tr>
+<tr><td>As Late As Possible</td><td>Sposta l'attività il più tardi possibile senza ritardare i successori</td></tr>
+</tbody></table></div>
+
+<h3 id="s5-6"><span class="n">5.6</span>Lavorare con Excel</h3>
+<p><strong>Esportare</strong>: tasto destro sulla tabella <span class="path">› Export to Excel</span> (esporta ciò che è a schermo, filtri compresi) oppure <span class="path">File › Export › Spreadsheet</span> scegliendo progetto, tabelle e colonne.</p>
+<p><strong>Reimportare</strong> con <span class="path">File › Import</span>, a Excel chiuso. Il file esportato ha una struttura da rispettare:</p>
+<ul>
+<li>riga 1: nomi tecnici dei campi del database; riga 2: intestazioni leggibili. Non vanno cancellate;</li>
+<li>foglio <strong>USERDATA</strong>: impostazioni dell'utente (unità, valuta). Non va cancellato;</li>
+<li>colonne calcolate (date Early e Late, float): ignorate in import anche se modificate;</li>
+<li>l'import aggiorna o aggiunge solo le righe presenti nel file e non cancella quelle assenti; per eliminare un'attività si scrive <strong>Y</strong> nella colonna <strong>Delete This Row</strong>.</li>
+</ul>
+<div class="box warn"><span class="lab">Attenzione</span><p>Esportare sempre con il filtro <em>All Activities</em> se si vuole lavorare sull'intero progetto, e controllare che il separatore decimale di Excel sia lo stesso di P6.</p></div>
+</div>
+</section>
+
+<section class="chapter" id="c6">
+<h2 class="ch"><span class="n">6</span>Legami e schedulazione</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>I legami definiscono la sequenza logica tra attività. Con <kbd>F9</kbd> P6 calcola le date con il metodo del percorso critico: un passaggio in avanti per le date Early, uno all'indietro per le date Late. Dalla differenza nasce il float, che individua le attività critiche. Il log della schedulazione è il primo controllo di qualità.</p></div>
+
+<h3 id="s6-1"><span class="n">6.1</span>Tipi di relazione e lag</h3>
+<p>Si assegnano dalla parte bassa, schede <strong>Predecessors</strong> o <strong>Successors</strong> <span class="path">› Assign</span>, oppure trascinando tra due barre nel Gantt. I legami sono logici: dicono cosa non può avvenire prima di cosa.</p>
+<figure><div class="fig">
+<svg viewBox="0 0 860 160" role="img" aria-label="I quattro tipi di relazione: Finish to Start, Start to Start, Finish to Finish, Start to Finish">
+  <g font-size="15" font-weight="600" class="s-ink"><text x="20" y="22">FS</text><text x="235" y="22">SS</text><text x="450" y="22">FF</text><text x="665" y="22">SF</text></g>
+  <g font-size="12" class="s-muted"><text x="44" y="22">Finish to Start</text><text x="259" y="22">Start to Start</text><text x="474" y="22">Finish to Finish</text><text x="689" y="22">Start to Finish</text></g>
+  <g>
+    <rect x="20" y="40" width="80" height="14" rx="2" class="b-act"/><rect x="112" y="84" width="80" height="14" rx="2" class="b-rem"/>
+    <rect x="235" y="40" width="110" height="14" rx="2" class="b-act"/><rect x="265" y="84" width="110" height="14" rx="2" class="b-rem"/>
+    <rect x="450" y="40" width="110" height="14" rx="2" class="b-act"/><rect x="470" y="84" width="120" height="14" rx="2" class="b-rem"/>
+    <rect x="745" y="40" width="90" height="14" rx="2" class="b-act"/><rect x="665" y="84" width="90" height="14" rx="2" class="b-rem"/>
+  </g>
+  <g fill="none" class="s-strk" stroke-width="1.5">
+    <path d="M100 47 h6 v44 h4"/><path d="M237 54 v37 h26"/><path d="M560 47 h40 v44 h-8"/><path d="M747 54 v14 h12 v23 h-2"/>
+  </g>
+  <g class="s-ink"><path d="M112 91 l-6 -4 v8 z"/><path d="M265 91 l-6 -4 v8 z"/><path d="M590 91 l6 -4 v8 z"/><path d="M755 91 l6 -4 v8 z"/></g>
+  <g font-size="13" class="s-ink">
+    <text x="20" y="128">B inizia quando A finisce</text><text x="20" y="146" class="s-muted">sequenza classica</text>
+    <text x="235" y="128">B inizia dopo l'inizio di A</text><text x="235" y="146" class="s-muted">lavorazioni in parallelo sfasate</text>
+    <text x="450" y="128">B finisce dopo la fine di A</text><text x="450" y="146" class="s-muted">es. finiture dietro gli impianti</text>
+    <text x="665" y="128">B finisce quando A inizia</text><text x="665" y="146" class="s-muted">raro, pianificazione a ritroso</text>
+  </g>
+</svg></div>
+<figcaption><b>Barra blu = predecessore, barra verde = successore.</b> FS e SS vincolano l'inizio del successore; FF e SF ne vincolano la fine.</figcaption></figure>
+<ul>
+<li><strong>Lag</strong>: ritardo tra le due attività, ad esempio SS con lag 5 = il successore inizia 5 giorni dopo l'inizio del predecessore. Un lag negativo (lead) è possibile ma rende la logica poco leggibile.</li>
+<li>Se le frecce non si vedono, nella barra orizzontale è disattivato <strong>Relationship lines</strong>; con migliaia di attività conviene spegnerlo.</li>
+</ul>
+
+<h3 id="s6-2"><span class="n">6.2</span>Schedulare con F9</h3>
+<p>MS Project e Synchro ricalcolano a ogni modifica; P6 lo fa quando si lancia la schedulazione: <span class="path">Tools › Schedule</span>, pulsante Schedule nella barra, oppure <kbd>F9</kbd>. Nella finestra si imposta la <span class="t" tabindex="0" data-t="dd">Data date</span> e con <strong>Options</strong> le regole di calcolo.</p>
+<div class="tw"><table>
+<thead><tr><th>Opzione</th><th>Cosa decide</th></tr></thead>
+<tbody>
+<tr><td>Data date</td><td>Data di aggiornamento: prima è consuntivo, dopo è ancora da fare. Nessuna parte rimanente viene pianificata prima</td></tr>
+<tr><td>Log to file</td><td>Scrive un rapporto della schedulazione, leggibile con <span class="path">F9 › View Log</span></td></tr>
+<tr><td>Out-of-sequence: Retained Logic, Progress Override, Actual Dates</td><td>Come trattare le attività avanzate prima dei loro predecessori (10.5)</td></tr>
+<tr><td>Define critical activities as</td><td>Total float minore o uguale a un valore, oppure Longest Path (6.4)</td></tr>
+<tr><td>Calcolo del lag</td><td>Su quale calendario contare i giorni di lag</td></tr>
+<tr><td>Ricalcolo automatico</td><td>Rischedula a ogni modifica che cambia le date; di solito spento sui progetti grandi</td></tr>
+</tbody></table></div>
+
+<h3 id="s6-3"><span class="n">6.3</span>Il percorso critico (CPM)</h3>
+<p><strong>Passaggio in avanti</strong>, da sinistra a destra: per ogni attività l'inizio e la fine al più presto, <span class="t" tabindex="0" data-t="es">Early Start</span> ed Early Finish. Sono le date che si usano per pianificare. <strong>Passaggio all'indietro</strong>, da destra a sinistra, partendo dalla fine del progetto: inizio e fine al più tardi, Late Start e Late Finish. Servono a calcolare il float.</p>
+<figure><div class="fig">
+<svg viewBox="0 0 790 300" role="img" aria-label="Reticolo di esempio: A 20 giorni, poi B, C, D di 10 giorni sul percorso critico; E e F di 5 giorni su un ramo parallelo con 10 giorni di float">
+  <defs><marker id="arw" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" class="s-muted"/></marker>
+  <marker id="arc" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" class="b-crit"/></marker></defs>
+  <g fill="none" stroke-width="1.8">
+    <path d="M170 150 C190 150 190 70 208 70" class="k-crit" marker-end="url(#arc)"/>
+    <path d="M360 70 H398" class="k-crit" marker-end="url(#arc)"/>
+    <path d="M550 70 C570 70 570 150 588 150" class="k-crit" marker-end="url(#arc)"/>
+    <path d="M170 150 C190 150 190 230 208 230" class="s-mstrk" marker-end="url(#arw)"/>
+    <path d="M360 230 H398" class="s-mstrk" marker-end="url(#arw)"/>
+    <path d="M550 230 C570 230 570 150 588 150" class="s-mstrk" marker-end="url(#arw)"/>
+  </g>
+  <g font-size="12" text-anchor="middle">
+    <!-- nodo: x,y,w150,h80 -->
+    <g transform="translate(20,110)"><rect width="150" height="80" rx="4" class="s-surface k-crit" stroke-width="2"/><path d="M0 26 H150 M0 54 H150 M50 0 V26 M100 0 V26 M50 54 V80 M100 54 V80" class="s-line" stroke-width="1"/>
+      <text x="25" y="18" class="s-ink">1</text><text x="75" y="18" class="s-muted">20 g</text><text x="125" y="18" class="s-ink">20</text>
+      <text x="75" y="45" class="s-ink" font-size="15" font-weight="700">A</text>
+      <text x="25" y="72" class="s-ink">1</text><text x="75" y="72" class="b-crit" font-weight="700">TF 0</text><text x="125" y="72" class="s-ink">20</text></g>
+    <g transform="translate(210,30)"><rect width="150" height="80" rx="4" class="s-surface k-crit" stroke-width="2"/><path d="M0 26 H150 M0 54 H150 M50 0 V26 M100 0 V26 M50 54 V80 M100 54 V80" class="s-line" stroke-width="1"/>
+      <text x="25" y="18" class="s-ink">21</text><text x="75" y="18" class="s-muted">10 g</text><text x="125" y="18" class="s-ink">30</text>
+      <text x="75" y="45" class="s-ink" font-size="15" font-weight="700">B</text>
+      <text x="25" y="72" class="s-ink">21</text><text x="75" y="72" class="b-crit" font-weight="700">TF 0</text><text x="125" y="72" class="s-ink">30</text></g>
+    <g transform="translate(400,30)"><rect width="150" height="80" rx="4" class="s-surface k-crit" stroke-width="2"/><path d="M0 26 H150 M0 54 H150 M50 0 V26 M100 0 V26 M50 54 V80 M100 54 V80" class="s-line" stroke-width="1"/>
+      <text x="25" y="18" class="s-ink">31</text><text x="75" y="18" class="s-muted">10 g</text><text x="125" y="18" class="s-ink">40</text>
+      <text x="75" y="45" class="s-ink" font-size="15" font-weight="700">C</text>
+      <text x="25" y="72" class="s-ink">31</text><text x="75" y="72" class="b-crit" font-weight="700">TF 0</text><text x="125" y="72" class="s-ink">40</text></g>
+    <g transform="translate(590,110)"><rect width="150" height="80" rx="4" class="s-surface k-crit" stroke-width="2"/><path d="M0 26 H150 M0 54 H150 M50 0 V26 M100 0 V26 M50 54 V80 M100 54 V80" class="s-line" stroke-width="1"/>
+      <text x="25" y="18" class="s-ink">41</text><text x="75" y="18" class="s-muted">10 g</text><text x="125" y="18" class="s-ink">50</text>
+      <text x="75" y="45" class="s-ink" font-size="15" font-weight="700">D</text>
+      <text x="25" y="72" class="s-ink">41</text><text x="75" y="72" class="b-crit" font-weight="700">TF 0</text><text x="125" y="72" class="s-ink">50</text></g>
+    <g transform="translate(210,190)"><rect width="150" height="80" rx="4" class="s-surface s-mstrk" stroke-width="1.3"/><path d="M0 26 H150 M0 54 H150 M50 0 V26 M100 0 V26 M50 54 V80 M100 54 V80" class="s-line" stroke-width="1"/>
+      <text x="25" y="18" class="s-ink">21</text><text x="75" y="18" class="s-muted">5 g</text><text x="125" y="18" class="s-ink">25</text>
+      <text x="75" y="45" class="s-ink" font-size="15" font-weight="700">E</text>
+      <text x="25" y="72" class="s-ink">31</text><text x="75" y="72" class="s-acc" font-weight="700">TF 10</text><text x="125" y="72" class="s-ink">35</text></g>
+    <g transform="translate(400,190)"><rect width="150" height="80" rx="4" class="s-surface s-mstrk" stroke-width="1.3"/><path d="M0 26 H150 M0 54 H150 M50 0 V26 M100 0 V26 M50 54 V80 M100 54 V80" class="s-line" stroke-width="1"/>
+      <text x="25" y="18" class="s-ink">26</text><text x="75" y="18" class="s-muted">5 g</text><text x="125" y="18" class="s-ink">30</text>
+      <text x="75" y="45" class="s-ink" font-size="15" font-weight="700">F</text>
+      <text x="25" y="72" class="s-ink">36</text><text x="75" y="72" class="s-acc" font-weight="700">TF 10</text><text x="125" y="72" class="s-ink">40</text></g>
+  </g>
+  <g font-size="12" class="s-muted"><text x="20" y="22">In alto: ES | durata | EF</text><text x="20" y="290">In basso: LS | Total float | LF (giorni lavorativi numerati dal giorno 1)</text></g>
+</svg></div>
+<figcaption><b>Esempio del corso.</b> Il percorso A-B-C-D (rosso) dura 50 giorni e ha float zero. Il ramo E-F finisce al giorno 30 ma D può iniziare solo al 41: E e F possono slittare di 10 giorni senza ritardare la fine (TF = LS - ES = 31 - 21 = 10).</figcaption></figure>
+<div class="formula"><span>Total float = LS - ES = LF - EF</span><span>Free float = ES successore - EF attività</span></div>
+<ul>
+<li><span class="t" tabindex="0" data-t="tf">Total float</span>: di quanto può slittare o allungarsi un'attività senza spostare la fine del progetto. TF = 0: nessun margine; TF negativo: il progetto è già oltre la data imposta.</li>
+<li><span class="t" tabindex="0" data-t="ff">Free float</span>: di quanto può slittare senza disturbare il successore. Con la numerazione a giorni interi del corso si toglie 1 (es. F: 41 - 30 - 1 = 10 giorni). Non entra nel calcolo del percorso critico.</li>
+</ul>
+
+<h3 id="s6-4"><span class="n">6.4</span>Attività critiche</h3>
+<p>Si definiscono in <span class="path">Projects › scheda Settings › Define critical activities as</span>, in alternativa:</p>
+<ul>
+<li><strong>Total float less than or equal to</strong> un valore (default 0);</li>
+<li><strong>Longest Path</strong>: la catena più lunga di attività fino alla fine del progetto. È il criterio più robusto quando si usano calendari diversi o vincoli.</li>
+</ul>
+<p>Le attività critiche appaiono in rosso nel Gantt <span class="chip c-crit"><i></i>critica</span>; esiste un filtro predefinito <em>Critical</em> per vederle da sole.</p>
+
+<h3 id="s6-5"><span class="n">6.5</span>Leggere il log</h3>
+<p>Il log della schedulazione segnala:</p>
+<ul>
+<li><strong>Warnings</strong>: attività senza predecessori o senza successori (open end), vincoli, attività fuori sequenza;</li>
+<li><strong>Errors</strong>: loop, cioè legami circolari che impediscono il calcolo;</li>
+<li><strong>Results</strong>: tra gli altri, la data di fine calcolata del progetto (nel workshop del corso il 19/07/12).</li>
+</ul>
+<div class="box tip"><span class="lab">Buona pratica</span><p>Ogni attività, tranne la prima e l'ultima milestone, dovrebbe avere almeno un predecessore e un successore. È il primo dei controlli di qualità usati nel settore (es. il DCMA 14-Point Assessment).</p></div>
+</div>
+</section>
+
+<section class="chapter" id="c7">
+<h2 class="ch"><span class="n">7</span>Layout, filtri e Gantt</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Un layout è una vista salvata: colonne, raggruppamenti, filtri, scala del tempo e barre del Gantt. Si costruisce dalla barra orizzontale o con il tasto destro e si salva con un nome. Le date Start e Finish sono contenitori che mostrano la data giusta secondo lo stato dell'attività.</p></div>
+
+<h3 id="s7-1"><span class="n">7.1</span>Colonne e date</h3>
+<p>Tasto destro sull'intestazione <span class="path">› Columns</span>. Le colonne <strong>Start</strong> e <strong>Finish</strong> mostrano date diverse secondo lo stato dell'attività:</p>
+<div class="tw"><table>
+<thead><tr><th>Activity status</th><th>Start mostra</th><th>Finish mostra</th><th>Barra nel Gantt</th></tr></thead>
+<tbody>
+<tr><td>Not Started</td><td>Planned/Early start</td><td>Planned/Early finish</td><td><span class="chip c-rem"><i></i>rimanente</span></td></tr>
+<tr><td>In Progress</td><td>Actual start (con una A accanto)</td><td>Remaining finish, stimata</td><td><span class="chip c-act"><i></i>fino alla DD</span> <span class="chip c-rem"><i></i>dopo</span></td></tr>
+<tr><td>Completed</td><td>Actual start</td><td>Actual finish</td><td><span class="chip c-act"><i></i>consuntivo</span></td></tr>
+</tbody></table></div>
+<p>Lo stesso schema planned / actual / remaining vale per le unità e i costi delle risorse (8.4).</p>
+
+<h3 id="s7-2"><span class="n">7.2</span>Group and Sort</h3>
+<p>Tasto destro <span class="path">› Group and Sort</span>. Si raggruppa per una proprietà gerarchica (WBS, EPS) o lineare (codici, stato, responsabile), fino a 20 livelli.</p>
+<ul>
+<li><strong>To level</strong>: con la WBS si fermano i livelli dove servono (es. 6) e si aggiungono sotto altri raggruppamenti (es. per fornitore).</li>
+<li><strong>Show group totals</strong>: totali e date nei raggruppamenti. <strong>Show grand totals</strong>: una riga di totale generale, inutile se si raggruppa già per WBS.</li>
+<li><strong>Show summaries only</strong>: nasconde le attività e lascia i sommari; ottimo per i report di sintesi.</li>
+<li><strong>Hide if empty</strong> e <strong>Shrink vertical grouping bands</strong>: puliscono la vista.</li>
+</ul>
+<div class="box tip"><span class="lab">Assegnare attività alla WBS</span><p>Con il raggruppamento per WBS (To level: All), selezionare le attività, <kbd>Ctrl</kbd>+<kbd>X</kbd>, tasto destro sulla riga del nodo WBS di destinazione e <kbd>Ctrl</kbd>+<kbd>V</kbd>. I legami restano. Mai copiare: si duplicano le attività. Lo stesso metodo vale per spostare attività tra raggruppamenti per codice.</p></div>
+
+<h3 id="s7-3"><span class="n">7.3</span>Filtri</h3>
+<p>Tasto destro <span class="path">› Filters</span>. I filtri si creano e si salvano in un'anagrafica, separata per attività, WBS e progetti.</p>
+<ul>
+<li><strong>Applicare</strong>: spuntare il filtro (es. <em>Critical</em>) e Apply. <strong>Togliere</strong>: spuntare <em>All Activities</em>.</li>
+<li><strong>Combinare</strong>: <em>All selected filters</em> = AND (tutte le condizioni), <em>Any selected filter</em> = OR (almeno una). Due condizioni opposte sullo stesso campo in AND danno sempre zero righe.</li>
+<li><strong>Crearne uno</strong>: New, poi parametro, operatore e valore (es. <code>Activity Type equals Task Dependent</code>). Con Add si concatenano più condizioni; l'operatore <em>is within range of</em> con High value serve per gli intervalli di date.</li>
+</ul>
+
+<h3 id="s7-4"><span class="n">7.4</span>Il Gantt</h3>
+<figure><div class="fig">
+<svg viewBox="0 0 860 220" role="img" aria-label="Gantt con barre consuntive blu, rimanenti verdi, critica rossa, baseline gialla sotto ogni barra e linea della data date">
+  <g font-size="12" class="s-muted"><text x="230" y="20">Ott</text><text x="350" y="20">Nov</text><text x="470" y="20">Dic</text><text x="590" y="20">Gen</text><text x="710" y="20">Feb</text></g>
+  <g class="s-line" stroke-width="1"><line x1="220" y1="28" x2="840" y2="28"/><line x1="340" y1="28" x2="340" y2="190"/><line x1="460" y1="28" x2="460" y2="190"/><line x1="580" y1="28" x2="580" y2="190"/><line x1="700" y1="28" x2="700" y2="190"/></g>
+  <g font-size="13" class="s-ink">
+    <text x="12" y="54"><tspan class="s-acc" style="font-family:var(--font-mono)">A1000</tspan>  Progettazione</text>
+    <text x="12" y="94"><tspan class="s-acc" style="font-family:var(--font-mono)">A1010</tspan>  Scavi</text>
+    <text x="12" y="134"><tspan class="s-acc" style="font-family:var(--font-mono)">A1020</tspan>  Fondazioni</text>
+    <text x="12" y="174"><tspan class="s-acc" style="font-family:var(--font-mono)">A1030</tspan>  Strutture</text>
+  </g>
+  <rect x="240" y="42" width="150" height="14" rx="2" class="b-act"/><rect x="240" y="58" width="140" height="5" class="b-bl"/>
+  <rect x="380" y="82" width="120" height="14" rx="2" class="b-act"/><rect x="500" y="82" width="70" height="14" rx="2" class="b-rem"/><rect x="370" y="98" width="140" height="5" class="b-bl"/>
+  <rect x="570" y="122" width="130" height="14" rx="2" class="b-crit"/><rect x="510" y="138" width="130" height="5" class="b-bl"/>
+  <rect x="700" y="162" width="120" height="14" rx="2" class="b-rem"/><rect x="640" y="178" width="120" height="5" class="b-bl"/>
+  <line x1="500" y1="30" x2="500" y2="196" class="k-acc" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="506" y="210" font-size="12" class="s-acc">Data date</text>
+</svg></div>
+<figcaption><b>Lettura del Gantt dopo un aggiornamento.</b> Blu: consuntivo fino alla Data date. Verde: lavoro rimanente. Rosso: rimanente critico. Giallo sottile: baseline. Lo scarto tra barra e baseline mostra il ritardo.</figcaption></figure>
+<h4 id="s7-4-1">Scala del tempo</h4>
+<p>Tasto destro sul Gantt <span class="path">› Timescale</span>: formato su due righe (es. anno/mese), data di partenza (di solito <em>Earliest project start</em>), scala a calendario oppure <strong>ordinale</strong> (mese 1, 2, 3...), utile nelle offerte quando la data di inizio non è ancora nota. Trascinando la prima riga della scala ci si sposta nel tempo; trascinando la seconda si allungano o accorciano le barre.</p>
+<h4 id="s7-4-2">Barre personalizzate</h4>
+<p>Tasto destro <span class="path">› Bars</span>. Ogni barra ha: nome, <strong>Timescale</strong> (quali date disegna: Current bar, Baseline, Remaining...), <strong>Filter</strong> (a quali attività si applica, es. WBS <em>is under</em> FONDAZIONI, o un codice fornitore), stile (colore, forma, riga) ed etichette (posizione e campo, es. data di fine a destra). L'ordine nella lista decide chi sta sopra: la barra più in basso viene disegnata per ultima. Ogni barra finisce nella legenda di stampa.</p>
+<div class="legend"><span class="chip c-act"><i></i>Actual</span><span class="chip c-rem"><i></i>Remaining</span><span class="chip c-crit"><i></i>Critical remaining</span><span class="chip c-bl"><i></i>Project baseline</span><span class="chip c-sum"><i></i>Raggruppamenti WBS</span></div>
+<p>Altri aiuti visivi dalla barra orizzontale: <strong>Progress line</strong> (linea rossa che piega a sinistra sulle attività in ritardo e a destra su quelle in anticipo, solo per quelle iniziate) e <strong>Progress spotlight</strong> (evidenzia il prossimo periodo da aggiornare).</p>
+
+<h3 id="s7-5"><span class="n">7.5</span>Salvare e condividere i layout</h3>
+<ul>
+<li><span class="path">View › Layout › Save Layout As</span>: sempre <em>Save As</em> con un nome nuovo, altrimenti si sovrascrive il layout aperto.</li>
+<li>In un database condiviso un layout può essere personale, di progetto o globale.</li>
+<li><strong>Import/Export</strong> in formato <code>.plf</code> per passarlo a un collega o a un altro database.</li>
+</ul>
+<div class="box tip"><span class="lab">Buona pratica</span><p>Tenere un piccolo set di layout standard e concordati: lavoro (tutte le colonne utili), revisione (raggruppato per WBS con totali), stampa per il committente (solo sommari e barre baseline). Stampare sempre da un layout salvato.</p></div>
+</div>
+</section>
+
+<section class="chapter" id="c8">
+<h2 class="ch"><span class="n">8</span>Risorse e ruoli</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Le risorse sono un'anagrafica comune al database: persone, mezzi e materiali con prezzo, disponibilità e calendario. Assegnate alle attività generano ore e costi, distribuiti nel tempo e modellabili con curve. Il profilo di utilizzo mostra le sovrallocazioni da risolvere.</p></div>
+
+<h3 id="s8-1"><span class="n">8.1</span>Tipi di risorsa</h3>
+<div class="tw"><table>
+<thead><tr><th>Tipo</th><th>Cosa rappresenta</th><th>Unità</th></tr></thead>
+<tbody>
+<tr><td>Labor</td><td>Persone e squadre (costi diretti)</td><td>Ore</td></tr>
+<tr><td>Nonlabor</td><td>Mezzi e attrezzature</td><td>Ore</td></tr>
+<tr><td>Material</td><td>Materiali</td><td>Unità di misura scelta (m³, t, m...)</td></tr>
+</tbody></table></div>
+<p>I <strong>ruoli</strong> sono profili professionali (es. elettricista, capocantiere). Si usano nella prima pianificazione, quando ancora non si sa quali persone saranno assegnate, e si sostituiscono poi con le risorse vere (<em>Assign by Role</em>).</p>
+
+<h3 id="s8-2"><span class="n">8.2</span>Creare una risorsa</h3>
+<p><span class="path">Enterprise › Resources</span>, con Display: All Resources. Le risorse si organizzano ad albero (RBS) con le frecce della barra destra.</p>
+<div class="tw"><table>
+<thead><tr><th>Campo</th><th>Esempio</th><th>Significato</th></tr></thead>
+<tbody>
+<tr><td>Price/Unit</td><td class="num">23,00 €/h</td><td>Costo orario; fino a 5 prezzi diversi, scelti dal Rate type del progetto</td></tr>
+<tr><td>Default Units/Time</td><td class="num">8 h/g</td><td>Impegno standard quando la risorsa viene assegnata</td></tr>
+<tr><td>Max Units/Time</td><td class="num">48 h/g</td><td>Disponibilità massima: oltre c'è sovrallocazione. 48 h/g = una squadra fino a 6 persone</td></tr>
+<tr><td>Effective date</td><td>dal 01/03</td><td>Tariffe e disponibilità che cambiano nel tempo (es. aumento contrattuale)</td></tr>
+<tr><td>Calendar</td><td>5 x 8</td><td>Usato solo dalle attività Resource Dependent</td></tr>
+<tr><td>Auto Compute Actuals</td><td>sì/no</td><td>Calcola le ore effettive dalla percentuale di avanzamento (vedi 13.4)</td></tr>
+</tbody></table></div>
+<div class="box"><span class="lab">Persona o squadra</span><p>Una risorsa chiamata <em>Verniciatore</em> con 48 h/g è una squadra; una risorsa <em>Mario Rossi</em> con 8 h/g è una persona. La scelta cambia il significato delle sovrallocazioni.</p></div>
+
+<h3 id="s8-3"><span class="n">8.3</span>Codici e dettagli della risorsa</h3>
+<p>Nella parte bassa: <strong>Codes</strong> per classificare (es. impresa, specializzazione) e filtrare; <strong>Details</strong> per tipo, valuta (utile con fornitori esteri) e calendario; <strong>Units &amp; Prices</strong> per le variazioni nel tempo.</p>
+
+<h3 id="s8-4"><span class="n">8.4</span>Assegnare le risorse</h3>
+<p>In Activities, parte bassa, scheda <strong>Resources</strong> <span class="path">› Add Resource</span> (oppure <em>Assign Role</em> / <em>Assign by Role</em>). P6 calcola le ore con Units/Time x Durata: ad esempio 8 h/g x 20 g = 320 h, con il relativo costo. Se il valore stimato è diverso, si corregge a mano.</p>
+<p>Ogni assegnazione ha quattro valori, per le unità e per i costi:</p>
+<div class="tw"><table>
+<thead><tr><th>Campo</th><th>Significato</th></tr></thead>
+<tbody>
+<tr><td>Budgeted</td><td>Il preventivo iniziale (es. 100 ore)</td></tr>
+<tr><td>Actual</td><td>Il consuntivo fino alla Data date</td></tr>
+<tr><td>Remaining</td><td>La stima del lavoro ancora da fare</td></tr>
+<tr><td>At Completion</td><td>Actual + Remaining: la stima a finire, che può superare il Budgeted</td></tr>
+</tbody></table></div>
+<p>La scheda <strong>Status</strong> mostra gli stessi campi per durate e unità dell'attività. Si personalizzano le colonne della scheda Resources con tasto destro <span class="path">› Customize Resource Columns</span>.</p>
+
+<h3 id="s8-5"><span class="n">8.5</span>Resource Assignments e distribuzione nel tempo</h3>
+<p><span class="path">Project › Resource Assignments</span> (attiva solo dopo la prima assegnazione) elenca le coppie risorsa-attività: ogni coppia è unica. A destra uno <strong>spreadsheet</strong> mostra le ore per periodo; cambiando la scala del tempo (settimane, mesi) cambiano i valori per cella. Con tasto destro <span class="path">› Spreadsheet Fields › Customize</span> si scelgono i campi, cumulati o per periodo (es. Budgeted Units e Budgeted Cost).</p>
+<div class="formula"><span>80 h budget / 10 g durata = 8 h per giorno nello spreadsheet</span></div>
+<p>La distribuzione di default è uniforme. Per cambiarla:</p>
+<ul>
+<li><strong>a mano</strong>, scrivendo nelle celle: attenzione, aumentare una cella aggiunge ore, non le sposta;</li>
+<li><strong>con una curva</strong> (<span class="path">Enterprise › Resource Curves</span>): profili in percentuale come la curva a S, con il picco a metà attività. Si assegna nella colonna <em>Curve</em> e il totale resta invariato.</li>
+</ul>
+<p>Se nella colonna Curve compare <em>Manual</em>, la distribuzione è stata modificata a mano: non si adatta più se l'attività si sposta.</p>
+
+<h3 id="s8-6"><span class="n">8.6</span>Sovrallocazioni</h3>
+<p>Nella barra orizzontale <strong>Resource Usage Profile</strong> mostra l'istogramma di una risorsa con una linea che indica la disponibilità massima. Le parti oltre la linea, in rosso, sono sovrallocazioni; un doppio clic sulla colonna mostra le ore in eccesso. <strong>Resource Usage Spreadsheet</strong> mostra gli stessi dati in tabella (filtrare su <em>Current Project's Resources</em>).</p>
+<figure><div class="fig">
+<svg viewBox="0 0 640 250" role="img" aria-label="Istogramma delle ore mensili di una risorsa con linea della disponibilità massima a 176 ore: marzo e aprile la superano">
+  <g font-size="12" class="s-muted" text-anchor="end"><text x="60" y="204">0</text><text x="60" y="150">80</text><text x="60" y="97">160</text><text x="60" y="44">240</text></g>
+  <g class="s-line" stroke-width="1"><line x1="70" y1="200" x2="620" y2="200"/><line x1="70" y1="146.7" x2="620" y2="146.7"/><line x1="70" y1="93.3" x2="620" y2="93.3"/><line x1="70" y1="40" x2="620" y2="40"/></g>
+  <!-- scala: 0,6667 px per ora; max 176 h -> y 82,7 -->
+  <rect x="90" y="120" width="60" height="80" class="s-acc"/>
+  <rect x="180" y="93.3" width="60" height="106.7" class="s-acc"/>
+  <rect x="270" y="82.7" width="60" height="117.3" class="s-acc"/><rect x="270" y="60" width="60" height="22.7" class="b-crit"/>
+  <rect x="360" y="82.7" width="60" height="117.3" class="s-acc"/><rect x="360" y="73.3" width="60" height="9.4" class="b-crit"/>
+  <rect x="450" y="106.7" width="60" height="93.3" class="s-acc"/>
+  <rect x="540" y="140" width="60" height="60" class="s-acc"/>
+  <line x1="70" y1="82.7" x2="620" y2="82.7" class="s-strk" stroke-width="2"/>
+  <text x="616" y="77" font-size="12" text-anchor="end" class="s-ink">Max 176 h/mese</text>
+  <g font-size="12" class="s-muted" text-anchor="middle"><text x="120" y="218">Gen</text><text x="210" y="218">Feb</text><text x="300" y="218">Mar</text><text x="390" y="218">Apr</text><text x="480" y="218">Mag</text><text x="570" y="218">Giu</text></g>
+  <g font-size="12" class="s-ink" text-anchor="middle"><text x="120" y="114">120</text><text x="210" y="87">160</text><text x="300" y="54">210</text><text x="390" y="67">190</text><text x="480" y="100">140</text><text x="570" y="134">90</text></g>
+  <text x="70" y="240" font-size="12" class="s-muted">Ore al mese (esempio: una persona, 22 giorni x 8 h = 176 h)</text>
+</svg></div>
+<figcaption><b>Resource Usage Profile.</b> A marzo e aprile la richiesta supera la disponibilità: 34 e 14 ore in più da riassorbire.</figcaption></figure>
+<p>Per risolvere:</p>
+<ol class="steps">
+<li><div>Allungare l'attività mantenendo fisse le ore: con Duration type <em>Fixed Units</em> P6 ricalcola la durata quando si riduce il ritmo.</div></li>
+<li><div>Ricalcolare a mano: durata = unità / (unità per tempo).</div></li>
+<li><div>Spostare attività con float, o assegnare un'altra risorsa.</div></li>
+</ol>
+<p>Con il profilo in modalità <strong>Stacked histogram</strong> e più risorse aggiunte da <span class="path">Resource Usage Profile Options</span> si confrontano gli impegni di più risorse nello stesso periodo, anche come curve cumulate di costo.</p>
+<div class="box warn"><span class="lab">Livellamento automatico</span><p><span class="path">Tools › Level Resources</span> sposta le attività entro il float per stare sotto la disponibilità. Il risultato dipende molto dalle priorità impostate e può stravolgere il programma: se lo si usa, farlo su una copia nel nodo BKG e confrontare.</p></div>
+<p>Dopo aver cambiato le tariffe: <span class="path">Tools › Recalculate Assignment Costs</span> aggiorna i costi delle assegnazioni esistenti.</p>
+</div>
+</section>
+
+<section class="chapter" id="c9">
+<h2 class="ch"><span class="n">9</span>Baseline</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>La baseline è la fotografia approvata del programma, con cui si misurerà ogni scostamento. In P6 è una copia completa del progetto. Si salva con Maintain Baselines, si collega con Assign Baselines e si confronta con colonne BL, colonne Variance e la barra gialla nel Gantt.</p></div>
+
+<h3 id="s9-1"><span class="n">9.1</span>Salvare e assegnare</h3>
+<ol class="steps">
+<li><div>Completare il programma e lanciare un ultimo <kbd>F9</kbd>: la baseline deve partire da date calcolate.</div></li>
+<li><div><span class="path">Project › Maintain Baselines › Add › Save a copy of the current project as a new baseline</span>. Se ne possono tenere più di una (es. contrattuale e varianti approvate).</div></li>
+<li><div><span class="path">Project › Assign Baselines</span>: si assegnano fino a quattro baseline, la <strong>Project baseline</strong> e tre baseline utente (Primary, Secondary, Tertiary) per confronti diversi.</div></li>
+<li><div>Per correggere una dimenticanza subito dopo il salvataggio: <span class="path">Maintain Baselines › Update</span>. In un contratto è più corretto creare una nuova baseline per ogni variante approvata.</div></li>
+</ol>
+<div class="box tip"><span class="lab">Buona pratica</span><p>Spostare la copia della baseline nel nodo EPS BASE (<span class="path">Projects</span>, taglia e incolla) e copiare il programma vivo nel nodo CURR includendo le baseline nella copia, così le barre gialle restano visibili.</p></div>
+
+<h3 id="s9-2"><span class="n">9.2</span>Confrontare con la baseline</h3>
+<ul>
+<li><strong>Colonne</strong>: il gruppo <em>Baseline</em> contiene le date e i valori BL (es. BL Project Start accanto a Start); il gruppo <em>Variance</em> le differenze (es. Variance - BL Project Finish Date).</li>
+<li><strong>Barre</strong>: <span class="path">Bars › Add</span>, Timescale <em>Project Baseline Bar</em>, colore giallo <span class="chip c-bl"><i></i></span>, forma sottile, riga 2 per stare sotto la barra corrente.</li>
+<li><strong>Segno</strong>: Variance = Baseline - Corrente. Un valore negativo sulla fine significa ritardo, sui costi significa extra costo.</li>
+</ul>
+<div class="box"><span class="lab">Undo</span><p>P6 ha <span class="path">Edit › Undo</span> per molte modifiche in Activities, Resources e Resource Assignments, ma lo storico si azzera con varie operazioni (import, Summarize, Update Progress, apertura e chiusura progetti, apertura delle preferenze o di codici e UDF). Prima di modifiche importanti conviene sempre una copia di backup.</p></div>
+</div>
+</section>
+
+<p class="part">Controllare</p>
+
+<section class="chapter" id="c10">
+<h2 class="ch"><span class="n">10</span>Aggiornare l'avanzamento</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Si lavora su una copia del programma nel nodo Current. A ogni periodo si inseriscono date effettive, percentuali, durate rimanenti e ore consuntive, poi si rischedula con la nuova Data date e si confronta con la baseline. Il ciclo si ripete uguale a ogni aggiornamento.</p></div>
+
+<h3 id="s10-1"><span class="n">10.1</span>Preparare il programma corrente</h3>
+<ol class="steps">
+<li><div><span class="path">File › Close All</span>, poi in Projects copia del progetto (<kbd>Ctrl</kbd>+<kbd>C</kbd>) e incolla nel nodo CURR (<kbd>Ctrl</kbd>+<kbd>V</kbd>), spuntando tutte le opzioni, <strong>baseline comprese</strong>.</div></li>
+<li><div>Aprire solo la copia e rinominarla con la data dell'aggiornamento.</div></li>
+<li><div>Ogni simulazione si fa su un'altra copia nel nodo BKG; per confrontare, aprire insieme i progetti.</div></li>
+</ol>
+
+<h3 id="s10-2"><span class="n">10.2</span>Il ciclo di aggiornamento</h3>
+<div class="cycle"><span>1. Raccogliere i dati dal cantiere</span><em>→</em><span>2. Date effettive e % completamento</span><em>→</em><span>3. Durate rimanenti</span><em>→</em><span>4. Ore e costi consuntivi</span><em>→</em><span>5. <kbd>F9</kbd> con la nuova Data date</span><em>→</em><span>6. Confronto con la baseline</span><em>↺</em></div>
+<p>Il foglio di avanzamento dal cantiere arriva di solito con cadenza settimanale o mensile (cut-off). In alternativa il modulo web <strong>Progress Reporter</strong> di P6 EPPM permette alle risorse di dichiarare le ore in un timesheet.</p>
+
+<h3 id="s10-3"><span class="n">10.3</span>Attività concluse e attività in corso</h3>
+<div class="two">
+<div class="card"><h4 id="s10-3-1">Attività conclusa</h4>
+<ol>
+<li>Parte bassa › <strong>Status</strong>: spuntare <em>Started</em> e <em>Finished</em>, <strong>prima la spunta, poi la data</strong>.</li>
+<li>Scheda <strong>Resources</strong>: verificare le Actual Units. Con Auto Compute Actuals P6 propone il budget; se in cantiere si sono lavorate più ore (es. 340 invece di 320), si corregge a mano.</li>
+</ol></div>
+<div class="card"><h4 id="s10-3-2">Attività in corso</h4>
+<ol>
+<li>Status: spuntare <em>Started</em> con la data effettiva di inizio.</li>
+<li><strong>Physical %</strong>: la percentuale valutata in cantiere (es. 80%).</li>
+<li><strong>Remaining Duration</strong>: quanti giorni servono ancora da oggi (es. 1).</li>
+<li>Resources: <strong>Actual Units</strong> e una stima delle <strong>Remaining Units</strong>.</li>
+</ol></div>
+</div>
+<div class="box warn"><span class="lab">Attenzione</span><p>Le date effettive devono stare prima della Data date, le date rimanenti dopo. Una spunta mette un punto fermo: dopo <kbd>F9</kbd> quell'estremo della barra non si muove più.</p></div>
+
+<h3 id="s10-4"><span class="n">10.4</span>Rischedulare e leggere il risultato</h3>
+<p><kbd>F9</kbd> con <strong>Current Data Date</strong> uguale alla data dell'aggiornamento (nel workshop: 31/12/11, poi 31/01/12). Il Gantt mostra le barre come nella figura del capitolo 7.4: consuntivo blu fino alla Data date, rimanente verde dopo, baseline gialla sotto. Se nella lista Bars la barra della baseline sta sopra quella corrente, i legami si vedono attaccati alla baseline: spostarla in basso.</p>
+<p>Con le colonne Variance si legge lo scostamento: ad esempio <em>Variance - BL Finish Date</em> = -10 g significa 10 giorni di ritardo sulla fine. Per i costi negativi con il segno meno invece delle parentesi: <span class="path">Admin › Currencies › Appearance › Negative currency format</span>.</p>
+<p>Nel profilo dell'attività (Activity Usage Profile, curve cumulate Baseline, Actual, Estimate at Completion) si vede subito se il costo a finire supera il budget.</p>
+
+<h3 id="s10-5"><span class="n">10.5</span>Attività fuori sequenza</h3>
+<p>Capita che un'attività inizi prima che il suo predecessore sia finito. Le opzioni di schedulazione decidono come trattarla:</p>
+<div class="tw"><table>
+<thead><tr><th>Opzione</th><th>Comportamento</th></tr></thead>
+<tbody>
+<tr><td>Retained Logic</td><td>La parte rimanente aspetta comunque la fine del predecessore. È la scelta più prudente e la più usata</td></tr>
+<tr><td>Progress Override</td><td>La logica viene ignorata: la parte rimanente prosegue subito</td></tr>
+<tr><td>Actual Dates</td><td>Le date effettive prevalgono sulla logica</td></tr>
+</tbody></table></div>
+
+<h3 id="s10-6"><span class="n">10.6</span>Update Progress</h3>
+<p><span class="path">Tools › Update Progress</span> sposta in avanti la Data date dichiarando fatto, come da programma, tutto ciò che era previsto nel periodo. Ha senso in processi ripetitivi (produzione), molto meno in cantiere: nasconde i ritardi reali. Azzera anche lo storico dell'Undo.</p>
+</div>
+</section>
+
+<section class="chapter" id="c11">
+<h2 class="ch"><span class="n">11</span>Report e stampa</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Il modulo Reports produce elenchi senza Gantt ed è poco usato. Lo strumento pratico è l'anteprima di stampa di un layout salvato, con intestazioni, legenda e parte bassa a scelta (spreadsheet o grafici). Per grafici più elaborati si esporta in Excel.</p></div>
+<h3 id="s11-1"><span class="n">11.1</span>Stampare un layout</h3>
+<ol class="steps">
+<li><div>Aprire il layout di stampa (colonne, raggruppamenti, barre).</div></li>
+<li><div><span class="path">File › Print Preview</span>: con <strong>Page Setup</strong> si impostano formato, margini, intestazione e piè di pagina (logo, titolo, data, legenda delle barre).</div></li>
+<li><div>Stampare o salvare in PDF dalla stampante PDF di sistema.</div></li>
+</ol>
+<h3 id="s11-2"><span class="n">11.2</span>Parte bassa nei report</h3>
+<p>La parte bassa entra in stampa. Oltre a Details (che in stampa non serve) si possono mostrare:</p>
+<div class="tw"><table>
+<thead><tr><th>Vista</th><th>Cosa mostra</th></tr></thead>
+<tbody>
+<tr><td>Activity Usage Spreadsheet</td><td>Ore e costi per periodo, per attività o raggruppamento</td></tr>
+<tr><td>Activity Usage Profile</td><td>Grafico di costi o unità: istogrammi per periodo e curve cumulate (Baseline, Actual, Remaining, Earned Value)</td></tr>
+<tr><td>Resource Usage Spreadsheet</td><td>Le assegnazioni per risorsa nel tempo</td></tr>
+<tr><td>Resource Usage Profile</td><td>Istogramma della risorsa con la linea della disponibilità</td></tr>
+</tbody></table></div>
+<p>Con tasto destro sul grafico <span class="path">› Options</span> si scelgono costi o unità, totali, istogrammi o curve; <span class="path">Table Font and Row</span> regola caratteri e altezza delle righe.</p>
+<h3 id="s11-3"><span class="n">11.3</span>Esportare per i grafici</h3>
+<ul>
+<li><span class="path">File › Export</span> (formato Excel o altri);</li>
+<li>tasto destro <span class="path">› Export to Excel</span> dalla tabella Activities;</li>
+<li><span class="path">Edit › Select All</span> e copia-incolla in Excel da qualsiasi tabella, ad esempio da Resource Assignments.</li>
+</ul>
+<p>In EPPM sono disponibili anche dashboard e report web.</p>
+</div>
+</section>
+
+<section class="chapter" id="c12">
+<h2 class="ch"><span class="n">12</span>Codici, UDF e Global Change</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>I codici aggiungono attributi con valori ammessi (fase, reparto, fornitore) per raggruppare, filtrare e colorare. Gli UDF sono campi liberi di appoggio. Il Global Change modifica o calcola in massa dei campi con una regola: va usato su UDF e su copie, perché non si annulla.</p></div>
+<h3 id="s12-1"><span class="n">12.1</span>Activity codes</h3>
+<p><span class="path">Enterprise › Activity Codes</span> (esistono anche Project Codes e Resource Codes). Un codice ha un ambito:</p>
+<ul><li><strong>Global</strong>: usabile in tutto il database;</li><li><strong>EPS</strong>: nei progetti di un ramo dell'EPS;</li><li><strong>Project</strong>: in un solo progetto.</li></ul>
+<p>Per creare un codice si usa <strong>Modify</strong> nella finestra dei codici (non Add), si aggiunge il nome (es. <code>PHAS</code>) e poi, con Add, la lista dei valori (es. <code>CLOSE</code> = tamponamenti).</p>
+<h4 id="s12-1-1">Assegnare i valori</h4>
+<ul>
+<li>dalla colonna del codice nella tabella delle attività;</li>
+<li>dalla scheda <strong>Codes</strong> della parte bassa con <strong>Assign</strong> (abilitarla con <span class="path">Customize Activity Details</span>);</li>
+<li>da Excel: esportare, compilare, reimportare, senza filtri attivi;</li>
+<li>più righe insieme: selezione multipla e Fill Down, oppure selezione multipla e scelta del valore.</li>
+</ul>
+<h4 id="s12-1-2">Usi</h4>
+<ul>
+<li><strong>Raggruppare</strong>: Group by PHAS riorganizza tabella, Gantt e totali per fase, anche in modo diverso dalla WBS; con un secondo livello (es. SUB, il fornitore) si vedono i subappaltatori dentro ogni fase.</li>
+<li><strong>Filtrare</strong>: es. <code>PHAS equals CLOSE</code>.</li>
+<li><strong>Grafici</strong>: in Activity Usage Profile, <em>Show usage for selected activities</em> mostra l'istogramma solo delle attività selezionate; <em>Display activities for selected time period</em> mostra le attività che cadono nel periodo selezionato sul grafico (utile per la domanda: cosa faremo il mese prossimo?).</li>
+<li><strong>Colorare il Gantt</strong>: una barra con filtro sul codice fornitore colora tutte le sue attività.</li>
+</ul>
+<div class="box tip"><span class="lab">Buona pratica</span><p>Creare codici di progetto o di EPS quando servono a un solo lavoro: i codici globali si accumulano e rendono le liste illeggibili.</p></div>
+<h3 id="s12-2"><span class="n">12.2</span>User Defined Fields</h3>
+<p><span class="path">Enterprise › User Defined Fields</span>, scegliendo l'entità (es. Activities). Un UDF ha un tipo: testo, data, numero intero o decimale, costo, indicatore (semaforo, valorizzabile anche in automatico con condizioni). Sono campi vuoti da riempire a mano, da Excel o con un Global Change.</p>
+<h3 id="s12-3"><span class="n">12.3</span>Global Change</h3>
+<p><span class="path">Tools › Global Change › New</span>. Una regola ha tre parti: <strong>If</strong> (condizione, vuota = sempre), <strong>Then</strong> (cosa fare), <strong>Else</strong>. Con <strong>Apply Changes</strong> si vede un'anteprima e si sceglie <strong>Commit</strong> o <strong>Cancel</strong>.</p>
+<div class="box"><span class="lab">Esempio del corso: scenario con durate +10%</span>
+<ol>
+<li>Copiare il progetto nel nodo BKG e aprire la copia.</li>
+<li>Creare l'UDF numerico <em>Durata 10%</em>.</li>
+<li>Global Change 1: Then <code>Durata 10% = Original Duration x 0,10</code>.</li>
+<li>Global Change 2: If <code>Durata 10% is not equal to 0</code> (esclude le milestone), Then <code>Original Duration = Original Duration + Durata 10%</code>.</li>
+<li><kbd>F9</kbd> e confronto aprendo insieme il progetto corrente e lo scenario.</li>
+</ol>
+<p>Il risultato del primo calcolo appare in ore: P6 registra le durate in ore e le converte in giorni solo in visualizzazione.</p></div>
+<div class="box warn"><span class="lab">Attenzione</span><p>I Global Change non si annullano. Si calcola sempre su UDF di appoggio e su copie, mai direttamente sui campi principali del programma corrente.</p></div>
+</div>
+</section>
+
+<section class="chapter" id="c13">
+<h2 class="ch"><span class="n">13</span>Financial periods</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Senza periodi finanziari P6 conosce solo il consuntivo cumulato e lo ridistribuisce in modo lineare dall'inizio dell'attività. Con i Financial periods si storicizza quanto fatto in ogni periodo, e grafici e Earned Value mostrano l'andamento reale. La procedura è rigida e va seguita nell'ordine.</p></div>
+<h3 id="s13-1"><span class="n">13.1</span>Perché servono</h3>
+<figure><div class="fig small">
+<svg viewBox="0 0 560 250" role="img" aria-label="Ore consuntive di un'attività in quattro periodi: con periodi finanziari 33, 21, 24, 40; senza, la stessa somma di 118 ore ridistribuita in 29,5 ore per periodo">
+  <g font-size="12" class="s-muted" text-anchor="end"><text x="46" y="194">0</text><text x="46" y="154">10</text><text x="46" y="114">20</text><text x="46" y="74">30</text><text x="46" y="34">40</text></g>
+  <g class="s-line" stroke-width="1"><line x1="54" y1="190" x2="540" y2="190"/><line x1="54" y1="150" x2="540" y2="150"/><line x1="54" y1="110" x2="540" y2="110"/><line x1="54" y1="70" x2="540" y2="70"/><line x1="54" y1="30" x2="540" y2="30"/></g>
+  <!-- 4 px per ora -->
+  <rect x="80" y="58" width="40" height="132" class="b-act"/><rect x="124" y="72" width="40" height="118" class="s-mstrk s-soft" stroke-width="1.2"/>
+  <rect x="200" y="106" width="40" height="84" class="b-act"/><rect x="244" y="72" width="40" height="118" class="s-mstrk s-soft" stroke-width="1.2"/>
+  <rect x="320" y="94" width="40" height="96" class="b-act"/><rect x="364" y="72" width="40" height="118" class="s-mstrk s-soft" stroke-width="1.2"/>
+  <rect x="440" y="30" width="40" height="160" class="b-act"/><rect x="484" y="72" width="40" height="118" class="s-mstrk s-soft" stroke-width="1.2"/>
+  <g font-size="12" text-anchor="middle" class="s-ink"><text x="100" y="52">33</text><text x="220" y="100">21</text><text x="340" y="88">24</text><text x="460" y="24">40</text><text x="144" y="66">29,5</text><text x="264" y="66">29,5</text><text x="384" y="66">29,5</text><text x="504" y="66">29,5</text></g>
+  <g font-size="12" text-anchor="middle" class="s-muted"><text x="122" y="208">Periodo 1</text><text x="242" y="208">Periodo 2</text><text x="362" y="208">Periodo 3</text><text x="482" y="208">Periodo 4</text></g>
+  <g font-size="12" class="s-ink"><rect x="80" y="226" width="14" height="10" class="b-act"/><text x="100" y="235">con FP: ore reali del periodo</text><rect x="300" y="226" width="14" height="10" class="s-soft s-mstrk"/><text x="320" y="235">senza FP: 118 h spalmate</text></g>
+</svg></div>
+<figcaption><b>Stessa attività, stesse 118 ore.</b> Il totale coincide; cambia la lettura per periodo, che è quella che serve per analizzare produttività e costanza del lavoro.</figcaption></figure>
+<p>Negli Stati Uniti si ragiona spesso solo sul cumulato; in Europa e nel controllo di gestione interessa anche il dettaglio di ogni periodo. Senza FP, inoltre, ogni aggiornamento ricalcola tutte le celle passate dello spreadsheet.</p>
+
+<h3 id="s13-2"><span class="n">13.2</span>La procedura</h3>
+<ol class="steps">
+<li><div><strong>Definire i periodi</strong> (amministratore, per tutto il database): <span class="path">Admin › Financial Period Calendars › Add › Modify</span>, date di inizio e fine (es. 01/01/11 - 31/12/12), cadenza (es. ogni mese), ultimo giorno del periodo, poi <strong>Batch Create</strong>. Assegnare il calendario al progetto: <span class="path">Projects › General › Financial Period Calendar</span>.</div></li>
+<li><div><strong>Inserire i consuntivi</strong>: oltre alle Actual Units cumulate esiste il campo <strong>Actual This Period Units</strong>, il parziale del periodo. Si compila l'uno o l'altro e P6 aggiorna l'altro.</div></li>
+<li><div><strong>Rischedulare</strong> con <kbd>F9</kbd> alla fine del periodo (es. Data date 31/01/12).</div></li>
+<li><div><strong>Storicizzare</strong>: <span class="path">Tools › Store Period Performance</span>, scegliendo progetto e periodo, poi <strong>Store Now</strong>. Il parziale viene salvato nel periodo e azzerato per il periodo successivo; il cumulato resta.</div></li>
+<li><div><strong>Leggere</strong>: in Activity Usage Profile spuntare <em>Display Actuals and Earned Value using Financial Period data</em>; in Resource Assignments i campi Period Actual Units; come colonne, con <span class="path">User Preferences › Application › Columns</span> e il gruppo Financial Period.</div></li>
+</ol>
+<div class="box warn"><span class="lab">Attenzione</span><p>I periodi sono globali e non si modificano dopo l'uso: un mese già usato non si può più dividere in settimane. Il corso consigliava periodi settimanali; se SAL e contabilità sono mensili, periodi mensili evitano le settimane a cavallo di due mesi.</p></div>
+
+<h3 id="s13-3"><span class="n">13.3</span>Ordine delle operazioni</h3>
+<div class="cycle"><span>Spunta Started/Finished</span><em>→</em><span>Date</span><em>→</em><span>% completamento</span><em>→</em><span>Remaining</span><em>→</em><span>Actual o This period units</span><em>→</em><span><kbd>F9</kbd></span><em>→</em><span>Store Now</span></div>
+<p>Data date e periodo storicizzato devono coincidere. Prima di Store Now, controllare che il calendario dei periodi sia assegnato e che il periodo sia quello giusto.</p>
+
+<h3 id="s13-4"><span class="n">13.4</span>Auto Compute Actuals e periodi</h3>
+<p>Auto Compute Actuals è comodo per il primo avanzamento. Dal secondo in poi, con i Financial periods, può generare parziali negativi: se il cumulato ricalcolato dalla percentuale è inferiore a quanto già storicizzato, la differenza del periodo risulta negativa. Con i periodi è più sicuro inserire a mano le ore del periodo.</p>
+</div>
+</section>
+
+<section class="chapter" id="c14">
+<h2 class="ch"><span class="n">14</span>Earned Value</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>L'Earned Value confronta tre importi alla Data date: quanto si doveva fare (PV), quanto si è fatto (EV) e quanto si è speso (AC). Da questi nascono scostamenti e indici di tempi e costi e le stime a finire. P6 li calcola da solo se ci sono una baseline e risorse con costi.</p></div>
+<h3 id="s14-1"><span class="n">14.1</span>Le tre grandezze</h3>
+<div class="tw"><table>
+<thead><tr><th>Sigla</th><th>Nome</th><th>Significato</th></tr></thead>
+<tbody>
+<tr><td>PV = BCWS</td><td>Planned Value</td><td>Valore del lavoro pianificato fino alla Data date, dalla baseline</td></tr>
+<tr><td>EV = BCWP</td><td>Earned Value</td><td>Valore del lavoro effettivamente svolto: budget x % completamento</td></tr>
+<tr><td>AC = ACWP</td><td>Actual Cost</td><td>Costo effettivamente sostenuto per quel lavoro (ore consuntive x tariffe, più spese)</td></tr>
+<tr><td>BAC</td><td>Budget at Completion</td><td>Budget totale del progetto, cioè il PV a fine lavori</td></tr>
+</tbody></table></div>
+<figure><div class="fig">
+<svg viewBox="0 0 840 320" role="img" aria-label="Curve a S di PV, EV e AC: alla data date PV vale 50, EV 40, AC 46 migliaia di euro su un budget di 100">
+  <g font-size="12" class="s-muted" text-anchor="end"><text x="62" y="274">0</text><text x="62" y="226">25</text><text x="62" y="178">50</text><text x="62" y="131">75</text><text x="62" y="83">100</text></g>
+  <g class="s-line" stroke-width="1"><line x1="70" y1="270" x2="790" y2="270"/><line x1="70" y1="222.2" x2="790" y2="222.2"/><line x1="70" y1="174.3" x2="790" y2="174.3"/><line x1="70" y1="126.5" x2="790" y2="126.5"/><line x1="70" y1="78.7" x2="790" y2="78.7"/></g>
+  <text x="70" y="30" font-size="12" class="s-muted">k€ cumulati</text>
+  <path fill="none" stroke-width="2.5" class="k-rem" d="M70.0 270.0 L81.8 269.8 L93.7 269.5 L105.5 269.2 L117.3 268.8 L129.2 268.3 L141.0 267.8 L152.8 267.2 L164.7 266.5 L176.5 265.6 L188.3 264.6 L200.2 263.5 L212.0 262.1 L223.8 260.5 L235.7 258.7 L247.5 256.6 L259.3 254.2 L271.2 251.4 L283.0 248.2 L294.8 244.6 L306.7 240.5 L318.5 235.9 L330.3 230.8 L342.2 225.3 L354.0 219.2 L365.8 212.6 L377.7 205.5 L389.5 198.1 L401.3 190.4 L413.2 182.4 L425.0 174.3 L436.8 166.3 L448.7 158.3 L460.5 150.6 L472.3 143.2 L484.2 136.1 L496.0 129.5 L507.8 123.4 L519.7 117.8 L531.5 112.8 L543.3 108.2 L555.2 104.1 L567.0 100.5 L578.8 97.3 L590.7 94.5 L602.5 92.1 L614.3 90.0 L626.2 88.2 L638.0 86.6 L649.8 85.2 L661.7 84.1 L673.5 83.1 L685.3 82.2 L697.2 81.5 L709.0 80.9 L720.8 80.4 L732.7 79.9 L744.5 79.5 L756.3 79.2 L768.2 78.9 L780.0 78.7"/>
+  <path fill="none" stroke-width="2.5" class="k-ev" d="M70.0 270.0 L78.9 269.9 L87.8 269.7 L96.6 269.5 L105.5 269.3 L114.4 269.1 L123.2 268.9 L132.1 268.6 L141.0 268.2 L149.9 267.9 L158.8 267.5 L167.6 267.0 L176.5 266.5 L185.4 265.9 L194.2 265.2 L203.1 264.5 L212.0 263.7 L220.9 262.8 L229.8 261.7 L238.6 260.6 L247.5 259.3 L256.4 257.8 L265.2 256.2 L274.1 254.5 L283.0 252.5 L291.9 250.4 L300.8 248.1 L309.6 245.5 L318.5 242.7 L327.4 239.7 L336.2 236.5 L345.1 233.0 L354.0 229.3 L362.9 225.4 L371.8 221.3 L380.6 217.0 L389.5 212.5 L398.4 207.9 L407.2 203.1 L416.1 198.3 L425.0 193.5"/>
+  <path fill="none" stroke-width="2.5" class="k-act" d="M70.0 270.0 L78.9 269.8 L87.8 269.7 L96.6 269.5 L105.5 269.2 L114.4 269.0 L123.2 268.7 L132.1 268.4 L141.0 268.0 L149.9 267.6 L158.8 267.1 L167.6 266.6 L176.5 266.0 L185.4 265.3 L194.2 264.5 L203.1 263.7 L212.0 262.7 L220.9 261.7 L229.8 260.5 L238.6 259.1 L247.5 257.7 L256.4 256.0 L265.2 254.2 L274.1 252.2 L283.0 249.9 L291.9 247.5 L300.8 244.8 L309.6 241.8 L318.5 238.7 L327.4 235.2 L336.2 231.5 L345.1 227.5 L354.0 223.2 L362.9 218.7 L371.8 214.0 L380.6 209.0 L389.5 203.8 L398.4 198.5 L407.2 193.1 L416.1 187.6 L425.0 182.0"/>
+  <line x1="425" y1="40" x2="425" y2="276" class="k-acc" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="430" y="292" font-size="12" class="s-acc">Data date</text>
+  <circle cx="425" cy="174.3" r="4" class="b-rem"/><circle cx="425" cy="193.5" r="4" class="b-ev"/><circle cx="425" cy="182" r="4" class="b-act"/>
+  <g font-size="13" class="s-ink">
+    <text x="447" y="176">PV 50</text><text x="447" y="190">AC 46</text><text x="447" y="204">EV 40</text>
+    <text x="700" y="70">BAC 100</text>
+  </g>
+  <g stroke-width="1" class="s-strk" stroke-dasharray="2 3"><line x1="492" y1="174.3" x2="580" y2="174.3"/><line x1="492" y1="182" x2="515" y2="182"/><line x1="492" y1="193.5" x2="580" y2="193.5"/></g>
+  <g stroke-width="1.5" class="s-strk"><line x1="580" y1="174.3" x2="580" y2="193.5"/><line x1="575" y1="174.3" x2="585" y2="174.3"/><line x1="575" y1="193.5" x2="585" y2="193.5"/></g>
+  <text x="592" y="188" font-size="12" class="s-ink">SV = EV - PV = -10</text>
+  <g stroke-width="1.5" class="s-strk"><line x1="515" y1="182" x2="515" y2="193.5"/><line x1="510" y1="182" x2="520" y2="182"/><line x1="510" y1="193.5" x2="520" y2="193.5"/></g>
+  <text x="494" y="214" font-size="12" class="s-ink">CV = EV - AC = -6</text>
+  <g font-size="12" class="s-ink"><line x1="90" y1="300" x2="110" y2="300" class="k-rem" stroke-width="3"/><text x="116" y="304">PV previsto</text>
+  <line x1="210" y1="300" x2="230" y2="300" class="k-ev" stroke-width="3"/><text x="236" y="304">EV fatto</text>
+  <line x1="320" y1="300" x2="340" y2="300" class="k-act" stroke-width="3"/><text x="346" y="304">AC speso</text></g>
+</svg></div>
+<figcaption><b>Esempio: budget 100 k€, metà tempo trascorso.</b> Si doveva aver prodotto 50 (PV), si è prodotto 40 (EV) spendendo 46 (AC): il progetto è in ritardo e sopra budget.</figcaption></figure>
+
+<h3 id="s14-2"><span class="n">14.2</span>Scostamenti, indici e previsioni</h3>
+<div class="tw"><table>
+<thead><tr><th>Domanda</th><th>Misura</th><th>Formula</th><th class="num">Esempio</th></tr></thead>
+<tbody>
+<tr><td>Siamo in anticipo o in ritardo?</td><td>Schedule Variance (SV)</td><td>EV - PV</td><td class="num">-10</td></tr>
+<tr><td>Con che efficacia usiamo il tempo?</td><td>Schedule Performance Index (SPI)</td><td>EV / PV</td><td class="num">0,80</td></tr>
+<tr><td>Siamo sopra o sotto budget?</td><td>Cost Variance (CV)</td><td>EV - AC</td><td class="num">-6</td></tr>
+<tr><td>Con che efficienza usiamo le risorse?</td><td>Cost Performance Index (CPI)</td><td>EV / AC</td><td class="num">0,87</td></tr>
+<tr><td>Quanto costerà il progetto?</td><td>Estimate at Completion (EAC)</td><td>BAC / CPI</td><td class="num">115,00</td></tr>
+<tr><td>Quanto costerà il lavoro rimanente?</td><td>Estimate to Complete (ETC)</td><td>EAC - AC</td><td class="num">69,00</td></tr>
+<tr><td>Di quanto sforeremo?</td><td>Variance at Completion (VAC)</td><td>BAC - EAC</td><td class="num">-15,00</td></tr>
+<tr><td>Che efficienza serve d'ora in poi?</td><td>To Complete Performance Index (TCPI)</td><td>(BAC - EV) / (BAC - AC)</td><td class="num">1,11</td></tr>
+</tbody></table></div>
+<p>P6 offre anche gli indici di scostamento SVI = SV / PV e CVI = CV / EV. Un SPI che si avvicina a 1 verso fine progetto non garantisce il rispetto dei tempi: a lavori finiti EV e PV coincidono comunque.</p>
+
+<h3 id="s14-3"><span class="n">14.3</span>Matrice di lettura</h3>
+<div class="tw"><table class="plain">
+<thead><tr><th>Costi \ Tempi</th><th>SV &gt; 0, SPI &gt; 1</th><th>SV = 0, SPI = 1</th><th>SV &lt; 0, SPI &lt; 1</th></tr></thead>
+<tbody>
+<tr><th>CV &gt; 0, CPI &gt; 1</th><td style="background:var(--tip-bg)">In anticipo, sotto budget</td><td style="background:var(--tip-bg)">Nei tempi, sotto budget</td><td style="background:var(--warn-bg)">In ritardo, sotto budget</td></tr>
+<tr><th>CV = 0, CPI = 1</th><td style="background:var(--tip-bg)">In anticipo, nel budget</td><td><strong>Nei tempi, nel budget</strong></td><td style="background:var(--warn-bg)">In ritardo, nel budget</td></tr>
+<tr><th>CV &lt; 0, CPI &lt; 1</th><td style="background:var(--warn-bg)">In anticipo, sopra budget</td><td style="background:var(--warn-bg)">Nei tempi, sopra budget</td><td style="background:color-mix(in srgb, var(--critical) 18%, var(--surface))">In ritardo, sopra budget</td></tr>
+</tbody></table></div>
+<p>Verde: situazione favorevole. Giallo: un indicatore va bene e l'altro no; "in ritardo sotto budget" spesso vuol dire solo che si spende poco perché si produce poco. Rosso: entrambi negativi, il caso dell'esempio.</p>
+
+<h3 id="s14-4"><span class="n">14.4</span>Earned Value in P6</h3>
+<ul>
+<li><strong>Colonne</strong>: in Activities il gruppo <em>Earned Value</em> (PV, EV, AC, SV, SPI, CV, CPI, EAC, ETC, VAC, TCPI...). Raggruppando per WBS si ottengono i valori per area.</li>
+<li><strong>Grafico</strong>: Activity Usage Profile, opzioni costi totali e <em>Show Earned Value curves</em>; con i Financial periods spuntare l'uso dei dati di periodo.</li>
+<li><strong>Impostazioni</strong>: per nodo WBS, scheda <em>Earned Value</em> (default in <span class="path">Admin Preferences › Earned Value</span>).</li>
+</ul>
+<div class="tw"><table>
+<thead><tr><th>Impostazione</th><th>Opzioni</th><th>Scelta tipica</th></tr></thead>
+<tbody>
+<tr><td>Calcolo della % per l'EV</td><td>Activity percent complete, 0/100, 50/50, Custom percent complete, WBS milestones percent complete, Activity percent complete using resource curves</td><td>Activity percent complete (usa la Physical %)</td></tr>
+<tr><td>Calcolo dell'ETC</td><td>ETC = Remaining cost for activity; PF = 1; PF = valore personalizzato; PF = 1/CPI; PF = 1/(CPI x SPI)</td><td>Remaining cost for activity</td></tr>
+</tbody></table></div>
+<p>Con 0/100 un'attività vale zero finché non è finita; con 50/50 vale metà all'inizio e tutto alla fine.</p>
+</div>
+</section>
+
+<section class="chapter" id="c15">
+<h2 class="ch"><span class="n">15</span>Rischi, issue e altre funzioni</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>P6 ha un registro rischi qualitativo (probabilità per impatto), un registro dei problemi aperti (issue) e soglie che creano issue in automatico. Completano il quadro gli Activity steps per misurare l'avanzamento di attività lunghe, le Expenses per i costi accessori e alcuni strumenti di servizio.</p></div>
+<h3 id="s15-1"><span class="n">15.1</span>Rischi</h3>
+<p>Un rischio è un evento incerto, negativo (<em>threat</em>) o positivo (<em>opportunity</em>). Si apre con l'icona dei dadi nella barra sinistra o <span class="path">Project › Risks</span>.</p>
+<ol class="steps">
+<li><div><strong>Add</strong>: ID, nome, categoria, tipo, stato, responsabile, periodo di esposizione.</div></li>
+<li><div>Scheda <strong>Impact</strong>, pre-risposta: probabilità e impatto su tempi e costi. P6 calcola il punteggio con la matrice di scoring.</div></li>
+<li><div>Scheda <strong>Activities</strong> <span class="path">› Assign</span>: le attività esposte.</div></li>
+<li><div>Nel tempo si compilano la risposta (es. Accept, con descrizione) e la valutazione post-risposta; se il rischio non si verifica, impatto <em>Negligible</em> e punteggio zero.</div></li>
+<li><div>In General si leggono <strong>Pre-response</strong> e <strong>Post-response exposure cost</strong>.</div></li>
+</ol>
+<div class="box"><span class="lab">Analisi quantitativa</span><p>Il registro di P6 è deterministico. Per una simulazione Monte Carlo su date e costi (probabilità P50, P80) si usa un prodotto dedicato, ad esempio Oracle Primavera Risk Analysis, che legge il programma P6. In Synchro l'effetto dei rischi si può mostrare anche sulle barre.</p></div>
+<h3 id="s15-2"><span class="n">15.2</span>Issue e soglie</h3>
+<p>Un <strong>issue</strong> non è un evento possibile ma un problema già presente, da assegnare a un responsabile e chiudere. Si crea a mano in <span class="path">Project › Issues</span>, con stato, priorità e responsabile, e si può notificare via mail.</p>
+<p>Una <strong>soglia</strong> (<span class="path">Project › Thresholds</span>) sorveglia un parametro su una parte della WBS e genera issue quando il valore esce dai limiti:</p>
+<div class="tw"><table>
+<thead><tr><th>Tipo</th><th>Parametri</th></tr></thead>
+<tbody>
+<tr><td>Scostamento in giorni</td><td>Start / Finish date variance, Total float, Free float</td></tr>
+<tr><td>Percentuale</td><td>Cost % of planned, Duration % of planned</td></tr>
+<tr><td>Importo</td><td>Cost variance, Schedule variance, Variance at completion</td></tr>
+<tr><td>Indice</td><td>CPI, CVI, SPI, SVI</td></tr>
+</tbody></table></div>
+<p>Definita la soglia (cosa, dove, quanto), <span class="path">Tools › Monitor Thresholds › Monitor</span> crea gli issue; <strong>Go To</strong> porta all'attività interessata.</p>
+<h3 id="s15-3"><span class="n">15.3</span>Activity steps</h3>
+<p>Sotto-passi di un'attività (es. getto di un solaio: casseri, armatura, getto), nella scheda <strong>Steps</strong> della parte bassa. Ogni step ha una descrizione, una percentuale e un <strong>peso</strong>. Con <span class="path">Projects › Calculations › Activity percent complete based on activity steps</span> la Physical % viene calcolata come media pesata degli step. Le liste ricorrenti si salvano come template (<em>Add from template</em>).</p>
+<p>Gli step sono utili per attività lunghe e misurabili, come il piping negli impianti. Per la durata delle attività vale la regola pratica 8/80: non meno di 8 e non più di 80 ore di lavoro, o non più di un periodo di aggiornamento.</p>
+<h3 id="s15-4"><span class="n">15.4</span>Expenses</h3>
+<p>Costi accessori legati a un'attività ma non a una risorsa: trasferte, alloggi, noli a corpo, forniture a prezzo chiuso. Scheda <strong>Expenses</strong> <span class="path">› Add</span>: importo budget e consuntivo, unità (es. 15 notti d'albergo), cost account e modalità di distribuzione (all'inizio, alla fine, uniforme). Entrano nei grafici di costo; per un totale senza spese si deselezionano.</p>
+<h3 id="s15-5"><span class="n">15.5</span>Strumenti di servizio</h3>
+<ul>
+<li><strong>Hint Help</strong> (icona a fumetto): mostra il contenuto di una cella o di una barra passandoci sopra.</li>
+<li><strong>Summarize</strong> (<span class="path">Tools › Summarize › All Projects</span>): ricalcola i totali di progetti ed EPS quando la vista Projects mostra valori non aggiornati. Non rischedula.</li>
+</ul>
+</div>
+</section>
+
+<p class="part">Ambiente</p>
+
+<section class="chapter" id="c16">
+<h2 class="ch"><span class="n">16</span>Utenti e sicurezza</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Con un database Oracle o SQL Server l'amministratore crea utenti e profili. I profili globali regolano cosa si può fare sulle anagrafiche comuni; quelli di progetto regolano l'accesso ai progetti, tramite l'OBS. Con SQLite queste funzioni non sono disponibili.</p></div>
+<h3 id="s16-1"><span class="n">16.1</span>Utenti e licenze</h3>
+<p><span class="path">Admin › Users › Add</span>. Si possono creare tutti gli utenti necessari; le licenze sono per utente nominale. Un utente può essere collegato a una risorsa, così vede le attività a cui è assegnato. L'ultima scheda, <strong>Module Access</strong>, abilita i moduli (almeno P6 Professional).</p>
+<h3 id="s16-2"><span class="n">16.2</span>Profili globali e di progetto</h3>
+<div class="two">
+<div class="card"><h4 id="s16-2-1">Global Security Profile</h4><p>Riguarda il menu Enterprise: creare progetti, modificare EPS, risorse, codici, calendari. Profili tipici: <em>Admin Superuser</em> (tutto), <em>No Global Privileges</em> (nessun diritto sulle anagrafiche). Se ne creano altri in <span class="path">Admin › Security Profiles</span> spuntando i singoli permessi.</p></div>
+<div class="card"><h4 id="s16-2-2">Project Security Profile</h4><p>Riguarda il menu Project. Si assegna a un utente <strong>insieme a un elemento dell'OBS</strong>: l'utente accede ai nodi EPS, ai progetti e alle WBS il cui Responsible Manager è quell'elemento OBS o un suo figlio.</p></div>
+</div>
+<div class="box"><span class="lab">Perché l'OBS conta</span><p>Nel lavoro singolo l'OBS è facoltativa; appena il database è condiviso diventa la chiave della sicurezza. Per questo conviene impostarla bene fin dall'inizio, coerente con l'organizzazione reale.</p></div>
+</div>
+</section>
+
+<section class="chapter" id="c17">
+<h2 class="ch"><span class="n">17</span>Scambio dati e pianificazione 4D</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>I progetti si scambiano in XER (formato nativo) o XML; Excel serve per liste e aggiornamenti massivi. Synchro collega il programma P6 al modello 3D e si sincronizza in due direzioni. La scelta tipica: P6 per il programma ufficiale e i report, Synchro per il dettaglio e la visualizzazione 4D.</p></div>
+<h3 id="s17-1"><span class="n">17.1</span>Formati di scambio</h3>
+<div class="tw"><table>
+<thead><tr><th>Formato</th><th>Uso</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>XER</td><td>Scambio tra database P6 (es. appaltatore e committente)</td><td>Si sceglie la versione di destinazione; più progetti in un file</td></tr>
+<tr><td>XML (P6)</td><td>Scambio con P6 e con software esterni (Synchro, altri)</td><td>Permette di scegliere quali baseline esportare; leggibile come testo</td></tr>
+<tr><td>Excel</td><td>Liste di attività, risorse, legami, aggiornamenti massivi</td><td>Rispettare la struttura del file esportato (5.6)</td></tr>
+<tr><td>MS Project</td><td>Scambio con chi usa Project</td><td>Si perdono le funzioni specifiche di P6</td></tr>
+</tbody></table></div>
+<h4 id="s17-1-1">Importare un XER</h4>
+<ol class="steps">
+<li><div><span class="path">File › Import</span>, formato Primavera PM (XER), file; oppure doppio clic sul file .xer.</div></li>
+<li><div>Per ogni progetto scegliere l'azione: Create New (P6 chiede il nodo EPS), Update Existing, Replace Existing, Add into Existing, Ignore.</div></li>
+<li><div>Con <strong>Update Project Options › Modify</strong> si decide cosa fare di calendari, risorse, codici già presenti (es. calendari: tenere gli esistenti o inserire i nuovi).</div></li>
+</ol>
+<div class="box warn"><span class="lab">Attenzione</span><p>Un XER di terzi può sovrascrivere calendari globali, risorse e codici dell'anagrafica comune. Importarlo prima in un nodo EPS di prova, controllare e solo dopo spostarlo.</p></div>
+
+<h3 id="s17-2"><span class="n">17.2</span>P6 e Synchro</h3>
+<figure><div class="fig">
+<svg viewBox="0 0 860 200" role="img" aria-label="Flusso tra P6, Synchro e modello 3D: import la prima volta, poi sincronizzazione bidirezionale">
+  <g font-size="14">
+    <rect x="20" y="60" width="200" height="80" rx="6" class="s-surface s-strk" stroke-width="1.3"/><text x="120" y="94" text-anchor="middle" class="s-ink" font-weight="600">Primavera P6</text><text x="120" y="114" text-anchor="middle" font-size="12" class="s-muted">programma ufficiale, baseline, report</text>
+    <rect x="330" y="60" width="200" height="80" rx="6" class="s-accsoft k-acc" stroke-width="1.6"/><text x="430" y="94" text-anchor="middle" class="s-ink" font-weight="600">Synchro 4D</text><text x="430" y="114" text-anchor="middle" font-size="12" class="s-muted">dettaglio, sequenze, 4D</text>
+    <rect x="640" y="60" width="200" height="80" rx="6" class="s-surface s-strk" stroke-width="1.3"/><text x="740" y="94" text-anchor="middle" class="s-ink" font-weight="600">Modello 3D (IFC)</text><text x="740" y="114" text-anchor="middle" font-size="12" class="s-muted">oggetti collegati alle attività</text>
+  </g>
+  <defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" class="s-ink"/></marker></defs>
+  <g fill="none" class="s-strk" stroke-width="1.6"><path d="M220 86 H326" marker-end="url(#ar2)"/><path d="M330 114 H224" marker-end="url(#ar2)"/><path d="M530 100 H636" marker-end="url(#ar2)"/></g>
+  <g font-size="12" class="s-ink" text-anchor="middle"><text x="275" y="78">Import (prima volta)</text><text x="275" y="134">Synchronize</text><text x="583" y="92">collegamento</text></g>
+  <text x="430" y="180" text-anchor="middle" font-size="12" class="s-muted">via file XML oppure collegamento diretto al database con le API di P6 (non con SQLite)</text>
+</svg></div>
+<figcaption><b>Il ponte P6 - Synchro.</b> Dopo il primo import si usa sempre Synchronize: l'Export romperebbe il collegamento.</figcaption></figure>
+<ul>
+<li><strong>Import in Synchro</strong>: <span class="path">File › Import › Primavera P6</span>, da file XML (non XER) oppure da database se le API sono installate e configurate in Synchro.</li>
+<li><strong>Sincronizzazione</strong>: in Synchro, <span class="path">External Data › Synchronize</span> per portare le modifiche fatte in P6, <em>Synchronize to</em> per riportare in P6 quelle fatte in Synchro. Il collegamento usa l'Activity ID: non va cambiato.</li>
+<li><strong>Baseline</strong>: non passa automaticamente. Conviene tenerla come progetto separato in P6, importarla in Synchro e salvarla lì come baseline.</li>
+<li><strong>Codici</strong>: arrivano con l'import; in Synchro si possono colorare e usare per colorare anche gli oggetti 3D (per fase o per fornitore).</li>
+<li><strong>Limiti</strong>: Synchro non gestisce i Financial periods. Se in Synchro si pianifica a livello di WBS o si aggiungono sotto-attività, tornando in P6 i nuovi legami sulla WBS non esistono e <kbd>F9</kbd> ricalcola secondo le regole di P6.</li>
+</ul>
+<div class="tw"><table>
+<thead><tr><th>Modello di lavoro</th><th>P6</th><th>Synchro</th></tr></thead>
+<tbody>
+<tr><td>1. Ruoli separati</td><td>Alto livello, supervisione, baseline</td><td>Pianificazione di dettaglio e collegamento al 3D</td></tr>
+<tr><td>2. Allineati</td><td>Reportistica ufficiale richiesta dal committente</td><td>Visualizzazione 4D, anche per spiegare l'avanzamento</td></tr>
+</tbody></table></div>
+<h3 id="s17-3"><span class="n">17.3</span>Altri software 4D</h3>
+<div class="tw"><table>
+<thead><tr><th>Software</th><th>Caratteristiche</th></tr></thead>
+<tbody>
+<tr><td>Bentley Synchro</td><td>Pianificazione e 4D, sincronizzazione bidirezionale con P6 e MS Project; moduli Control, Field, Perform, Cost. Di Bentley Systems dal 2018</td></tr>
+<tr><td>Asta Powerproject</td><td>Pianificazione con funzioni 4D/BIM</td></tr>
+<tr><td>Autodesk Navisworks</td><td>Controllo del modello e clash detection; TimeLiner collega programmi esterni (P6 compreso) in sola lettura, aggiornandoli dal programma al modello</td></tr>
+<tr><td>BEXEL Manager</td><td>Piattaforma openBIM certificata IFC: 4D, 5D, gestione e manutenzione. Più orizzontale, molto semplice da usare</td></tr>
+<tr><td>BIM Vision</td><td>Visualizzatore IFC gratuito</td></tr>
+</tbody></table></div>
+<p>Per la contabilità e il computo restano strumenti dedicati (es. TeamSystem CPM): i software 4D non li sostituiscono.</p>
+</div>
+</section>
+
+<section class="chapter" id="c18">
+<h2 class="ch"><span class="n">18</span>Buone pratiche ed errori comuni</h2>
+<div class="read">
+<div class="sintesi"><span class="lab">Sintesi</span><p>Una lista di controllo da usare prima di consegnare un programma o una baseline, e gli errori più frequenti visti nel corso.</p></div>
+<h3 id="s18-1"><span class="n">18.1</span>Prima di salvare la baseline</h3>
+<ul class="check">
+<li>Calendari corretti, festività incluse, assegnati alle attività giuste.</li>
+<li>Ogni attività ha almeno un predecessore e un successore (tranne inizio e fine).</li>
+<li>Nessun loop; il log di <kbd>F9</kbd> non ha errori.</li>
+<li>Pochi vincoli, ognuno motivato; nessun Mandatory senza ragione.</li>
+<li>Lag ragionevoli, nessun lag negativo senza motivo.</li>
+<li>Durate coerenti con la regola 8/80 e con il periodo di aggiornamento.</li>
+<li>Percorso critico continuo dall'inizio alla fine (Longest Path).</li>
+<li>Risorse e costi assegnati; nessuna sovrallocazione non voluta.</li>
+<li>Codici compilati per fase, area e fornitore.</li>
+<li>Ultimo <kbd>F9</kbd> fatto, poi Maintain Baselines e copia nel nodo BASE.</li>
+</ul>
+<h3 id="s18-2"><span class="n">18.2</span>A ogni aggiornamento</h3>
+<ul class="check">
+<li>Lavorare su una copia datata nel nodo CURR.</li>
+<li>Date effettive tutte prima della Data date; date rimanenti tutte dopo.</li>
+<li>Percentuali e durate rimanenti stimate in cantiere, non calcolate dal tempo trascorso.</li>
+<li><kbd>F9</kbd> con la nuova Data date; se si usano i Financial periods, Store Period Performance.</li>
+<li>Controllo del log, delle variance sulla baseline e dell'Earned Value.</li>
+</ul>
+<h3 id="s18-3"><span class="n">18.3</span>Errori da evitare</h3>
+<div class="tw"><table>
+<thead><tr><th>Errore</th><th>Conseguenza</th><th>Come evitarlo</th></tr></thead>
+<tbody>
+<tr><td>Save Layout invece di Save As</td><td>Si sovrascrive un layout condiviso</td><td>Sempre Save Layout As</td></tr>
+<tr><td>Copiare attività per metterle nella WBS</td><td>Attività duplicate</td><td>Taglia e incolla</td></tr>
+<tr><td>Export Excel con un filtro attivo</td><td>Il file contiene solo una parte delle attività</td><td>Filtro All Activities</td></tr>
+<tr><td>Global Change sui campi principali</td><td>Modifica non annullabile</td><td>UDF di appoggio su una copia BKG</td></tr>
+<tr><td>Dimenticare <kbd>F9</kbd></td><td>Date e float non aggiornati</td><td>Rischedulare dopo ogni gruppo di modifiche</td></tr>
+<tr><td>Importare un XER direttamente nel nodo di lavoro</td><td>Anagrafiche sovrascritte</td><td>Import in un nodo di prova</td></tr>
+<tr><td>Livellare risorse sul programma vivo</td><td>Programma stravolto</td><td>Livellare su una copia e confrontare</td></tr>
+</tbody></table></div>
+</div>
+</section>
+
+<section class="chapter" id="c19">
+<h2 class="ch"><span class="n">19</span>Glossario</h2>
+<div class="read">
+<div class="tw"><table id="glossTable">
+<thead><tr><th>Termine</th><th>Definizione</th></tr></thead>
+<tbody></tbody></table></div>
+</div>
+</section>
+
+<footer class="foot read">
+<p><strong>Nota sulla guida.</strong> Questa guida riorganizza e completa la trascrizione degli appunti di lezione del corso PoliMI CISE su Oracle Primavera P6 (docente Simone Belloni). Gli errori evidenti degli appunti sono stati corretti (es. formula della durata, data 31/12/11, valori dello scenario senza Financial periods); le integrazioni vengono dalla documentazione Oracle e da fonti di settore. Le date e i valori del workshop si riferiscono all'esercizio del corso. I nomi dei comandi sono quelli dell'interfaccia inglese di P6 Professional e possono variare leggermente tra versioni.</p>
+<p><strong>Fonti</strong></p>
+<ul>
+<li><a href="https://docs.oracle.com/cd/G48897_01/p6help/en/6631.htm" target="_blank" rel="noopener">Oracle - About Duration Types</a></li>
+<li><a href="https://docs.oracle.com/cd/G48897_01/p6help/en/47228.htm" target="_blank" rel="noopener">Oracle - Percent Complete Columns</a></li>
+<li><a href="https://docs.oracle.com/cd/G48897_01/p6help/en/6673.htm" target="_blank" rel="noopener">Oracle - Working with Activity Constraints</a></li>
+<li><a href="https://docs.oracle.com/cd/F25600_01/client_help/ar_EG/using_undo.htm" target="_blank" rel="noopener">Oracle - Undo in P6 Professional</a></li>
+<li><a href="https://docs.oracle.com/cd/F25599_01/English/Integration_Documentation/p6_eppm_web_services_reference/42399.htm" target="_blank" rel="noopener">Oracle - Project Fields (tecniche EV ed ETC, tipi di attività)</a></li>
+<li><a href="https://docs.oracle.com/en/database/oracle/oracle-database/21/xeinl/licensing-restrictions.html" target="_blank" rel="noopener">Oracle - Limiti di Database 21c XE</a></li>
+<li><a href="https://projectcontrolsonline.com/blogs/13-category1/680-how-does-retained-logic-progress-override-and-actual-dates-in-scheduling-options-work" target="_blank" rel="noopener">Project Controls Online - Retained Logic, Progress Override, Actual Dates</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Primavera_Systems" target="_blank" rel="noopener">Wikipedia - Primavera Systems</a></li>
+<li><a href="https://tensix.com/p6-professional-25-12-is-released/" target="_blank" rel="noopener">Ten Six - P6 Professional 25.12</a></li>
+<li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Navisworks-Timeliner/files/GUID-4CFA1F1B-AE51-41CC-93AD-45952F38C415.htm" target="_blank" rel="noopener">Autodesk - Navisworks TimeLiner, Data Sources</a></li>
+<li><a href="https://aecmag.com/news/bentley-synchro" target="_blank" rel="noopener">AEC Magazine - Bentley Synchro</a></li>
+<li><a href="https://aecbytes.com/review/2020/BEXEL-Manager.html" target="_blank" rel="noopener">AECbytes - BEXEL Manager</a></li>
+</ul>
+<p><a class="toplink" href="#c1">↑ Torna all'inizio</a></p>
+</footer>
+</main>
+</div>
+
+<div id="pop" role="tooltip" hidden></div>
+
+<script>
+(function(){
+  var G = {
+    "ac":["Actual Cost (AC, ACWP)","Costo effettivamente sostenuto per il lavoro svolto fino alla Data date."],
+    "bac":["Budget at Completion (BAC)","Budget totale del progetto: il valore pianificato a fine lavori."],
+    "bl":["Baseline","Copia approvata del programma, usata come riferimento per misurare gli scostamenti."],
+    "ca":["Control account","Incrocio tra un elemento della WBS e un responsabile dell'OBS: il punto in cui si controllano insieme scope, costi e tempi."],
+    "cpm":["CPM","Critical Path Method: calcolo delle date al più presto e al più tardi per trovare il percorso critico."],
+    "dd":["Data date","Data di aggiornamento del programma. Prima è consuntivo, dopo è lavoro rimanente; F9 non pianifica nulla di rimanente prima di questa data."],
+    "eps":["EPS","Enterprise Project Structure: albero che ordina i progetti nel database e regola l'accesso degli utenti."],
+    "es":["Early Start / Early Finish","Inizio e fine al più presto, calcolati con il passaggio in avanti. Sono le date usate per pianificare."],
+    "ev":["Earned Value (EV, BCWP)","Valore del lavoro svolto: budget per percentuale di completamento."],
+    "ff":["Free float","Giorni di cui un'attività può slittare senza ritardare l'inizio di nessun successore."],
+    "fp":["Financial period","Periodo (es. mese) in cui P6 storicizza i consuntivi con Store Period Performance."],
+    "gc":["Global Change","Regola If / Then / Else che modifica o calcola in massa dei campi. Non si annulla."],
+    "lf":["Late Start / Late Finish","Inizio e fine al più tardi, calcolati con il passaggio all'indietro dalla fine del progetto."],
+    "loe":["Level of Effort","Attività la cui durata dipende dai legami con altre attività; usata per attività di supporto. Non è mai critica."],
+    "lp":["Longest Path","La catena più lunga di attività fino alla fine del progetto; criterio alternativo al float per le attività critiche."],
+    "obs":["OBS","Organizational Breakdown Structure: gerarchia dei responsabili. In un database condiviso regola la sicurezza dei progetti."],
+    "pv":["Planned Value (PV, BCWS)","Valore del lavoro previsto dalla baseline fino alla Data date."],
+    "rbs":["RBS","Resource Breakdown Structure: l'albero delle risorse."],
+    "tf":["Total float","Giorni di cui un'attività può slittare senza spostare la fine del progetto. TF = LS - ES."],
+    "udf":["UDF","User Defined Field: campo libero definito dall'utente (testo, numero, data, costo, indicatore)."],
+    "wbs":["WBS","Work Breakdown Structure: scomposizione gerarchica del lavoro del progetto."],
+    "wbss":["WBS Summary","Attività che va dal primo inizio all'ultima fine delle attività del suo nodo WBS."],
+    "xer":["XER","Formato nativo di scambio dei progetti tra database P6."]
+  };
+  // Glossario
+  var tb=document.querySelector('#glossTable tbody');
+  Object.keys(G).sort(function(a,b){return G[a][0].localeCompare(G[b][0],'it')}).forEach(function(k){
+    var tr=document.createElement('tr'); var a=document.createElement('td'); a.textContent=G[k][0];
+    var b=document.createElement('td'); b.textContent=G[k][1]; tr.appendChild(a); tr.appendChild(b); tb.appendChild(tr);
+  });
+  // Popover dei termini
+  var pop=document.getElementById('pop'), cur=null;
+  function show(el){
+    var d=G[el.getAttribute('data-t')]; if(!d) return;
+    pop.innerHTML=''; var h=document.createElement('b'); h.textContent=d[0]; pop.appendChild(h); pop.appendChild(document.createTextNode(d[1]));
+    pop.hidden=false; cur=el;
+    var r=el.getBoundingClientRect(), pw=pop.offsetWidth, vw=document.documentElement.clientWidth;
+    var left=Math.min(Math.max(8, r.left+window.scrollX), window.scrollX+vw-pw-8);
+    pop.style.left=left+'px'; pop.style.top=(r.bottom+window.scrollY+6)+'px';
+  }
+  function hide(){ pop.hidden=true; cur=null; }
+  document.querySelectorAll('.t').forEach(function(el){
+    el.addEventListener('mouseenter',function(){show(el)});
+    el.addEventListener('mouseleave',hide);
+    el.addEventListener('focus',function(){show(el)});
+    el.addEventListener('blur',hide);
+    el.addEventListener('click',function(e){ e.stopPropagation(); if(cur===el) hide(); else show(el); });
+  });
+  document.addEventListener('click',hide);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hide(); });
+  // Indice: apertura su mobile ed evidenziazione del capitolo
+  var btn=document.getElementById('tocBtn'), nav=document.getElementById('tocNav');
+  function mobile(){ return window.matchMedia('(max-width:980px)').matches; }
+  function syncNav(){ if(mobile()){ nav.hidden = btn.getAttribute('aria-expanded')!=='true'; } else { nav.hidden=false; } }
+  btn.addEventListener('click',function(){ btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded')==='true'?'false':'true'); syncNav(); });
+  window.addEventListener('resize',syncNav); syncNav();
+  nav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ if(mobile()){ btn.setAttribute('aria-expanded','false'); syncNav(); } }); });
+  var links={}; nav.querySelectorAll('a').forEach(function(a){ links[a.getAttribute('href').slice(1)]=a; });
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ Object.keys(links).forEach(function(k){links[k].classList.remove('on')}); var l=links[e.target.id]; if(l) l.classList.add('on'); } }); },{rootMargin:'-20% 0px -70% 0px'});
+    document.querySelectorAll('section.chapter').forEach(function(s){ io.observe(s); });
+  }
+})();
+</script>
+
+<a class="mer-back" href="../index.html">Torna a Meridian</a></body></html>

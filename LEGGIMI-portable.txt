@@ -1,0 +1,7 @@
+MERIDIAN by nautargo - versione portable
+
+1. Estrai lo zip in una cartella qualsiasi (anche su chiavetta USB).
+2. Apri il file meridian/index.html con Chrome, Edge, Firefox o Safari.
+3. Non serve installazione ne' connessione: i dati restano nel browser del computer.
+4. Per spostare i dati su un altro computer: Amministrazione > Dati e installazione > Backup, poi Ripristina sull'altro computer.
+5. Versione online: https://meridian.nautargo.com
